@@ -19,7 +19,7 @@ matplotlib
 pydash
 cufflinks
 pandas
-kaleido==0.1.0.post1
-plotly
+plotly==5.3.1
+kaleido
 # flask_mysqldb
 # psycopg2-binary
