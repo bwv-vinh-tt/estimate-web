@@ -1,0 +1,40 @@
+{% extends "layouts/base.html" %}
+{% block title %} Blank Page {% endblock %} 
+
+<!-- Element injected in the BODY element -->
+{% block body_class %} {% endblock body_class %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="/static/assets/plugins/fontawesome-free/css/all.min.css">
+  <!-- fullCalendar -->
+  <link rel="stylesheet" href="/static/assets/plugins/fullcalendar/main.min.css">
+  <link rel="stylesheet" href="/static/assets/plugins/fullcalendar-daygrid/main.min.css">
+  <link rel="stylesheet" href="/static/assets/plugins/fullcalendar-timegrid/main.min.css">
+  <link rel="stylesheet" href="/static/assets/plugins/fullcalendar-bootstrap/main.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="/static/assets/css/adminlte.min.css">
+
+{% endblock stylesheets %}
+
+{% block content %}
+
+{% if result %}
+  <div class="alert alert-primary" role="alert">
+    {{result}}
+  </div>
+  {% endif %}
+<form action="{{ url_for('home') }}" method="post" enctype="multipart/form-data">
+<div class="container d-flex justify-content-center">
+  <div class="card px-1 py-4">
+    <input type="file" name="image" id="" >
+  </div>
+  <button type="submit">Submit</button>
+</div>
+</form>
+
+{% endblock %}

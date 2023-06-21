@@ -1,0 +1,25 @@
+flask
+Werkzeug
+jinja2
+flask_login
+flask_migrate
+WTForms
+flask_wtf
+flask_sqlalchemy
+sqlalchemy
+email_validator
+gunicorn
+flask-restx
+python-dotenv
+Flask-Minify
+numpy
+seaborn
+scikit-learn
+matplotlib
+pydash
+cufflinks
+pandas
+kaleido==0.1.0.post1
+plotly
+# flask_mysqldb
+# psycopg2-binary
