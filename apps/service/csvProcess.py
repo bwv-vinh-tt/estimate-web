@@ -164,7 +164,7 @@ def compareEstimateFieldFromCSV(uploaded_file):
             if classRedText != '' or keys_diff is not None:
                 RESULT_RETURN.append({
                     #  'Parent task': int(key) if isinstance(key, float) else key,
-                    'Parent task': int(value[0]['Parent task']) if isinstance(value[0]['Parent task'], float) else key,
+                    'Parent task': int(value[0]['Parent task']) if isinstance(value[0]['Parent task'], float) else '',
                     'Target coding task': getTrackerFromDict(find_dict(value, lambda d: d["Tracker"] == "Coding"))['Target coding task'],
                     'Target translate task': getTrackerFromDict(find_dict(value, lambda d: d["Tracker"] == "Translation"))['Target translation task'],
                     'Difference item': ','.join([str(key) for key in keys_diff]) if keys_diff is not None else '',
@@ -175,7 +175,7 @@ def compareEstimateFieldFromCSV(uploaded_file):
                 if checkIfAnyFieldEmptyInDict(item) is not None:
                     RESULT_RETURN.append({
                         # 'Parent task': int(key) if isinstance(key, float) else key,
-                        'Parent task': int(value[0]['Parent task']) if isinstance(value[0]['Parent task'], float) else key,
+                        'Parent task': int(value[0]['Parent task']) if isinstance(value[0]['Parent task'], float) else '',
                         'Target coding task': getTrackerFromDict(item)['Target coding task'] if check is not None else {},
                         'Target translate task': getTrackerFromDict(item)['Target translation task'] if check is not None else {},
                         'Difference item': ','.join([str(key) for key in keys_diff]) if keys_diff is not None else '',

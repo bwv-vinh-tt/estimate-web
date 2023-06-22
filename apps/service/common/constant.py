@@ -43,7 +43,7 @@ CONST_LABEL = {
 
 CONST_REDMINE_URL = 'https://redmine.bridevelopment.com/issues/'
 
-CONST_IGNORE_FIELD = ['Doc Mod Quantity', 'Business Logic Level', 'Coding Method Level']
+CONST_IGNORE_FIELD = ['Business Logic Level', 'Coding Method Level', 'Doc Understandable']
 
 
 def FILE_NAME(tracker,new_mod):

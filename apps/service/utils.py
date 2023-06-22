@@ -104,6 +104,8 @@ def find_dict(array, condition):
 
 
 def getUrlRedmine(id):
+    if not str(id).isdigit():
+        return ''
     return CONST_REDMINE_URL + str(id) if id != '' else ''
 
 def get_chart_or_remove(removeFlag: bool = False):
