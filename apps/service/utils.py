@@ -16,7 +16,7 @@ def convert_data_redmine(row):
 
     # convert minutes
     if hasattr(result, CONST_LABEL_EXPECTED):
-        result[CONST_LABEL_EXPECTED] = getValueZeroIfNan(result[CONST_LABEL_EXPECTED])
+        result[CONST_LABEL_EXPECTED] = getValueZeroIfNan(result[CONST_LABEL_EXPECTED]) * 60
     result['create_screen_api_batch_qty'] = getValueZeroIfNan(result['create_screen_api_batch_qty'])
     result['doc_mod_quantity'] = getValueZeroIfNan(result['doc_mod_quantity'])
     result['authority_qty'] = getValueZeroIfNan(result['authority_qty'])
