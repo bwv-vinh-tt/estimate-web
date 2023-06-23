@@ -6,6 +6,7 @@ from apps import db, login_manager
 
 from apps.authentication.util import hash_pass
 
+
 class Users(db.Model, UserMixin):
 
     __tablename__ = 'Users'

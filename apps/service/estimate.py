@@ -64,8 +64,9 @@ def trainModel():
 
     for tracker in [CONST_LABEL_CODING, CONST_LABEL_TRANSLATION]:
         for new_mod in [CONST_LABEL_NEW, CONST_LABEL_MOD]:
-            df = ESTIMATE_UTC[(ESTIMATE_UTC[CONST_LABEL_TRACKER_FROM_INPUT] == tracker) & (ESTIMATE_UTC[CONST_LABEL_NEW_MOD_FROM_INPUT] == new_mod)]
-            if(check_df_can_train(df) == False):
+            df = ESTIMATE_UTC[(ESTIMATE_UTC[CONST_LABEL_TRACKER_FROM_INPUT] == tracker) & (
+                ESTIMATE_UTC[CONST_LABEL_NEW_MOD_FROM_INPUT] == new_mod)]
+            if (check_df_can_train(df) == False):
                 continue
             X = df[labelTrain]
             y = df[[CONST_LABEL_EXPECTED]]
@@ -74,6 +75,7 @@ def trainModel():
             # X_scaled = scaler.fit_transform(X)
             readCSVAndTrainModel(X, y, tracker, new_mod)
     return True
+
 
 def check_df_can_train(df: pd.DataFrame):
     """
@@ -87,6 +89,7 @@ def check_df_can_train(df: pd.DataFrame):
     else:
         return False
 
+
 def readCSVAndTrainModel(
         X: pd.DataFrame,
         y: pd.DataFrame,
@@ -97,7 +100,7 @@ def readCSVAndTrainModel(
     """
     try:
         X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=0.3, random_state=10)
+            X, y, test_size=0.3, random_state=10)
 
         lm = LinearRegression()
         lm.fit(X_train, y_train)
@@ -137,7 +140,8 @@ def readCSVAndTrainModel(
 
         cf.go_offline()
         pio.renderers.default = "colab"
-        df = pd.DataFrame({"EST": np.array(predictions).flatten(), "Spent": np.array(y_test).flatten()})
+        df = pd.DataFrame(
+            {"EST": np.array(predictions).flatten(), "Spent": np.array(y_test).flatten()})
         fig = df.iplot(
             kind='scatter',
             mode='markers',
@@ -146,7 +150,10 @@ def readCSVAndTrainModel(
                 'green',
                 'red'])
         # Save the chart as a PNG file
-        directorySaveImg = os.path.join(os.getcwd(), 'apps\\static\\assets\\images', f'chart_{tracker}_{new_mod}.png')
+        directorySaveImg = os.path.join(
+            os.getcwd(),
+            'apps\\static\\assets\\images',
+            f'chart_{tracker}_{new_mod}.png')
         pio.write_image(fig, directorySaveImg, format='png', engine='kaleido')
     except Exception as error:
         print(error)

@@ -9,6 +9,7 @@ from apps.service.estimate import drawBoxPlot, estimate, trainModel
 from apps.service.utils import getUrlRedmine, get_chart_or_remove
 import urllib.parse
 
+
 @blueprint.route('/estimate', methods=('GET', 'POST'))
 def renderEstimate():
 
@@ -44,7 +45,11 @@ def upload():
         get_chart_or_remove(True)
         trainModel()
         img_array = get_chart_or_remove()
-    return render_template("estimatePage/importCSV.html", img=True , img_array = img_array, urllib_parse = urllib.parse)
+    return render_template(
+        "estimatePage/importCSV.html",
+        img=True,
+        img_array=img_array,
+        urllib_parse=urllib.parse)
 
 
 @blueprint.route('/checkBoxPlot', methods=['POST'])
@@ -72,7 +77,15 @@ def checkEstimateFieldValue():
         else:
             result = compareEstimateFieldFromCSV(request.files['file'])
             # sort by class red-text
-            resultSorted = sorted(result, key=lambda k: k['class'], reverse=True)
-            return render_template("estimatePage/compareEstimateFieldValue.html", result=resultSorted, getUrlRedmine=getUrlRedmine, segment='checkEstimateFieldValue', checkIfAnyFieldEmptyInDict=checkIfAnyFieldEmptyInDict)
+            resultSorted = sorted(
+                result, key=lambda k: k['class'], reverse=True)
+            return render_template(
+                "estimatePage/compareEstimateFieldValue.html",
+                result=resultSorted,
+                getUrlRedmine=getUrlRedmine,
+                segment='checkEstimateFieldValue',
+                checkIfAnyFieldEmptyInDict=checkIfAnyFieldEmptyInDict)
     else:
-        return render_template('estimatePage/importCSVCompareItem.html', segment='checkEstimateFieldValue')
+        return render_template(
+            'estimatePage/importCSVCompareItem.html',
+            segment='checkEstimateFieldValue')

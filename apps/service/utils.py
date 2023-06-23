@@ -6,6 +6,7 @@ import numpy as np
 import os
 from .common.constant import CONST_LABEL_EXPECTED, CONST_REDMINE_URL, CONST_CHART_IMAGE_NAME, root_dir
 
+
 def convert_data_redmine(row):
     result = py_.clone_deep(row)
     # CONVERT DIFF by some rules such as Coding / Mod ...
@@ -16,18 +17,22 @@ def convert_data_redmine(row):
 
     # convert minutes
     if hasattr(result, CONST_LABEL_EXPECTED):
-        result[CONST_LABEL_EXPECTED] = getValueZeroIfNan(result[CONST_LABEL_EXPECTED]) * 60
-    result['create_screen_api_batch_qty'] = getValueZeroIfNan(result['create_screen_api_batch_qty'])
+        result[CONST_LABEL_EXPECTED] = getValueZeroIfNan(
+            result[CONST_LABEL_EXPECTED]) * 60
+    result['create_screen_api_batch_qty'] = getValueZeroIfNan(
+        result['create_screen_api_batch_qty'])
     result['doc_mod_quantity'] = getValueZeroIfNan(result['doc_mod_quantity'])
     result['authority_qty'] = getValueZeroIfNan(result['authority_qty'])
-    result['display_output_items_qty'] = getValueZeroIfNan(result['display_output_items_qty'])
-    result['validation_items_qty'] = getValueZeroIfNan(result['validation_items_qty'])
+    result['display_output_items_qty'] = getValueZeroIfNan(
+        result['display_output_items_qty'])
+    result['validation_items_qty'] = getValueZeroIfNan(
+        result['validation_items_qty'])
     result['event_row'] = getValueZeroIfNan(result['event_row'])
     result['event_items_qty'] = getValueZeroIfNan(result['event_items_qty'])
     result['get_api_qty'] = getValueZeroIfNan(result['get_api_qty'])
     result['create_api_qty'] = getValueZeroIfNan(result['create_api_qty'])
     result['update_api_qty'] = getValueZeroIfNan(result['update_api_qty'])
-    result['delete_api_qty'] =  getValueZeroIfNan(result['delete_api_qty'])
+    result['delete_api_qty'] = getValueZeroIfNan(result['delete_api_qty'])
     result['get_table_qty'] = getValueZeroIfNan(result['get_table_qty'])
     result['create_table_qty'] = getValueZeroIfNan(result['create_table_qty'])
     result['update_table_qty'] = getValueZeroIfNan(result['update_table_qty'])
@@ -38,14 +43,14 @@ def convert_data_redmine(row):
         result['doc_layout'] = 30
     else:
         result['doc_layout'] = 10
-        
+
     result['doc_qa_amount'] = getValueZeroIfNan(result['doc_qa_amount'])
     result['doc_understandable'] = py_.replace(
         result['doc_understandable'], '%', '')
     result['doc_understandable'] = 100 if result['doc_understandable'] == 'nan' else result['doc_understandable']
     result['doc_understandable'] = (
         101 - py_.parse_int(result['doc_understandable'], 10))
-    
+
     # convert doc_file_format -> maybe remove later
     # if (result['doc_file_format'] == 'Google Sheet'):
     #     result['doc_file_format'] = 10
@@ -108,12 +113,13 @@ def getUrlRedmine(id):
         return ''
     return CONST_REDMINE_URL + str(id) if id != '' else ''
 
+
 def get_chart_or_remove(removeFlag: bool = False):
     result = []
     for name in CONST_CHART_IMAGE_NAME:
         PATH_FILE = os.path.join(root_dir, 'apps/static/assets/images', name)
-        if(os.path.exists(PATH_FILE)):
-            if(removeFlag == True):
+        if (os.path.exists(PATH_FILE)):
+            if (removeFlag):
                 os.remove(PATH_FILE)
             result.append(name)
     return result

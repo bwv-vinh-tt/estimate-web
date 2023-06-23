@@ -31,7 +31,7 @@ def route_template(template):
     except TemplateNotFound:
         return render_template('error/404.html'), 404
 
-    except:
+    except BaseException:
         return render_template('home/page-500.html'), 500
 
 
@@ -47,5 +47,5 @@ def get_segment(request):
 
         return segment
 
-    except:
+    except BaseException:
         return None
