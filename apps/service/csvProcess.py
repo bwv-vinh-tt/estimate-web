@@ -198,15 +198,18 @@ def compareCodingAndTranslateInOneGroupParentTask(
 
 def checkIfAnyFieldEmptyInDict(
         dict, label=CONST_LABEL_ESTIMATION_FIELD.split(',')):
+    """Check if any field empty in dict OR conflict between New_Mod and Doc_mod_quantity"""
     if len(dict) == 0:
         return None
 
     tracker = dict['Tracker']
+    new_mod = dict['New/Mod']
+    check_conflict = True if (new_mod == 'New' and dict['Doc Mod Quantity'] != 0) or (new_mod == 'Mod' and dict['Doc Mod Quantity'] == 0) else False
     removeLabel = 'Coding Method Level' if tracker == 'Coding' else 'Business Logic Level'
     if removeLabel in label:
         label.remove(removeLabel)
     for key, value in dict.items():
-        if value == '' and key in label:
+        if (value == '' and key in label) or check_conflict == True:
             return {
                 'Key': key,
                 'Target coding task': value if tracker == 'Coding' else '',

@@ -18,7 +18,7 @@ from sklearn.base import BaseEstimator, TransformerMixin
 from typing import Tuple
 
 labelTrain = CONST_LABEL_TRAIN
-
+pio.kaleido.scope.mathjax = None
 
 def estimate(data):
     transfer = transferDataFromRequest(data)
