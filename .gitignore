@@ -36,3 +36,6 @@ apps/static/assets/.temp
 
 # csv
 resources/*.csv
+
+# img
+apps/static/assets/images/*.png

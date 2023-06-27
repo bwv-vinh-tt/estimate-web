@@ -39,7 +39,10 @@
       </form>
 
       {% else %}
-
+        {% for text in effective %}
+          <h2>{{text}}</h2>
+        {% endfor %}
+        <br>
         {% for img in img_array %}
         <h2>{{img}}</h2>
           {% set url = urllib_parse.unquote(url_for('static', filename='assets/images/' + img)) %}

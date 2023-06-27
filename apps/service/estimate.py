@@ -3,22 +3,20 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LinearRegression, Lasso
+from sklearn.linear_model import LinearRegression
 from sklearn import metrics
 import joblib
 import numpy as np
 from .utils import convert_data_redmine
 from .common.constant import CONST_LABEL_CODING, CONST_LABEL_EXPECTED, CONST_LABEL_MOD, CONST_LABEL_NEW, CONST_LABEL_TRANSLATION, FILE_NAME, CONST_LABEL_TRAIN, CONST_LABEL_TRACKER_FROM_INPUT, CONST_LABEL_NEW_MOD_FROM_INPUT, FILE_NAME_JOB_LIB
 # from sklearn.preprocessing import StandardScaler , MinMaxScaler
-import matplotlib.pyplot as plt
 import cufflinks as cf
 import plotly.io as pio
-import plotly.express as px
 from sklearn.base import BaseEstimator, TransformerMixin
 from typing import Tuple
 
 labelTrain = CONST_LABEL_TRAIN
-pio.kaleido.scope.mathjax = None
+
 
 def estimate(data):
     transfer = transferDataFromRequest(data)
@@ -38,7 +36,6 @@ def loadModel(transfer, tracker, new_mod):
     # X_test_scaled = scaler.fit_transform(Test[labelTrain])
     predictions = lm.predict(Test[labelTrain])
 
-    print("Est time: ", pd.DataFrame(predictions, columns=['ouput']))
     return predictions[0]
 
 
@@ -48,7 +45,7 @@ def trainModel():
     Divide 4 files: coding_new_joblib, coding_mod_joblib, translation_new_joblib, translation_mod_joblib
     """
     ESTIMATE_UTC = pd.read_csv(os.getcwd() + '/resources/data.csv')
-
+    result_effective = []
     # remove outliers
     # ESTIMATE_UTC["validation_items_qty"] = BoxplotOutlierClipper().fit_transform(
     # ESTIMATE_UTC["validation_items_qty"])
@@ -73,8 +70,10 @@ def trainModel():
             # Scaler
             # scaler = StandardScaler()
             # X_scaled = scaler.fit_transform(X)
-            readCSVAndTrainModel(X, y, tracker, new_mod)
-    return True
+            result_effective.append(
+                readCSVAndTrainModel(
+                    X, y, tracker, new_mod))
+    return result_effective
 
 
 def check_df_can_train(df: pd.DataFrame):
@@ -98,6 +97,7 @@ def readCSVAndTrainModel(
     """
         Train by lm or Lasso
     """
+    result_effective = ''
     try:
         X_train, X_test, y_train, y_test = train_test_split(
             X, y, test_size=0.3, random_state=10)
@@ -117,6 +117,7 @@ def readCSVAndTrainModel(
         sns.histplot(y_test - predictions)
         plt.scatter(y_test, predictions)
 
+        effective = metrics.explained_variance_score(y_test, predictions)
         # print('MAE:', metrics.mean_absolute_error(y_test, predictions))
         # print('MSE:', metrics.mean_squared_error(y_test, predictions))
         print(
@@ -127,9 +128,8 @@ def readCSVAndTrainModel(
                     predictions)))
         print(
             f"Effective_{tracker}_{new_mod}: ",
-            metrics.explained_variance_score(
-                y_test,
-                predictions))
+            effective)
+        result_effective = f"Effective_{tracker}_{new_mod} = " + str(effective)
 
         # fields effect values
         coeff_df = pd.DataFrame(
@@ -149,15 +149,15 @@ def readCSVAndTrainModel(
             color=[
                 'green',
                 'red'])
+
         # Save the chart as a PNG file
         directorySaveImg = os.path.join(
-            os.getcwd(),
-            'apps\\static\\assets\\images',
+            os.getcwd(), 'apps', 'static', 'assets', 'images',
             f'chart_{tracker}_{new_mod}.png')
         pio.write_image(fig, directorySaveImg, format='png', engine='kaleido')
     except Exception as error:
         print(error)
-    return True
+    return result_effective
 
 
 def transferDataFromRequest(data):

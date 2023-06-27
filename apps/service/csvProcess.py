@@ -124,7 +124,7 @@ def initCSV(uploaded_file):
 
     # write csv
     df = pd.DataFrame(convert_data)
-    file_path = os.path.join(root_dir, 'resources/data.csv')
+    file_path = os.path.join(root_dir,'resources' , 'data.csv')
 
     df.to_csv(file_path, index=False)
 
@@ -204,12 +204,14 @@ def checkIfAnyFieldEmptyInDict(
 
     tracker = dict['Tracker']
     new_mod = dict['New/Mod']
-    check_conflict = True if (new_mod == 'New' and dict['Doc Mod Quantity'] != 0) or (new_mod == 'Mod' and dict['Doc Mod Quantity'] == 0) else False
+    check_conflict = True if (
+        new_mod == 'New' and dict['Doc Mod Quantity'] != 0) or (
+        new_mod == 'Mod' and dict['Doc Mod Quantity'] == 0) else False
     removeLabel = 'Coding Method Level' if tracker == 'Coding' else 'Business Logic Level'
     if removeLabel in label:
         label.remove(removeLabel)
     for key, value in dict.items():
-        if (value == '' and key in label) or check_conflict == True:
+        if (value == '' and key in label) or check_conflict:
             return {
                 'Key': key,
                 'Target coding task': value if tracker == 'Coding' else '',

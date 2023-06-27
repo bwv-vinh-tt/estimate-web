@@ -43,13 +43,14 @@ def upload():
     else:
         initCSV(file)
         get_chart_or_remove(True)
-        trainModel()
+        effective = trainModel()
         img_array = get_chart_or_remove()
     return render_template(
         "estimatePage/importCSV.html",
         img=True,
         img_array=img_array,
-        urllib_parse=urllib.parse)
+        urllib_parse=urllib.parse,
+        effective=effective)
 
 
 @blueprint.route('/checkBoxPlot', methods=['POST'])
