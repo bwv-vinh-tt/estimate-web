@@ -70,9 +70,14 @@ def trainModel():
             # Scaler
             # scaler = StandardScaler()
             # X_scaled = scaler.fit_transform(X)
+            rs1, rs2 = readCSVAndTrainModel(
+                X, y, tracker, new_mod)
             result_effective.append(
-                readCSVAndTrainModel(
-                    X, y, tracker, new_mod))
+                {
+                    "coeff": rs1,
+                    "json": rs2
+                }
+            )
     return result_effective
 
 
@@ -98,6 +103,7 @@ def readCSVAndTrainModel(
         Train by lm or Lasso
     """
     result_effective = ''
+    dict_result = {}
     try:
         X_train, X_test, y_train, y_test = train_test_split(
             X, y, test_size=0.3, random_state=10)
@@ -113,7 +119,6 @@ def readCSVAndTrainModel(
         # X_test_scaled = scaler.transform(X_test)
         # predictions = lm.predict(X_test_scaled)
         predictions = lm.predict(X_test)
-        print(f"predicted response:\n{predictions}")
         sns.histplot(y_test - predictions)
         plt.scatter(y_test, predictions)
 
@@ -136,8 +141,9 @@ def readCSVAndTrainModel(
             lm.coef_.T,
             X.columns,
             columns=['Coefficient'])
-        print(f'COEFF_{tracker}_{new_mod}:', coeff_df)
-
+        # print(f'COEFF_{tracker}_{new_mod}:', coeff_df)
+        dict_result = coeff_df.to_dict(orient='index')
+        print(dict_result)
         cf.go_offline()
         pio.renderers.default = "colab"
         df = pd.DataFrame(
@@ -157,7 +163,7 @@ def readCSVAndTrainModel(
         pio.write_image(fig, directorySaveImg, format='png', engine='kaleido')
     except Exception as error:
         print(error)
-    return result_effective
+    return result_effective, dict_result
 
 
 def transferDataFromRequest(data):

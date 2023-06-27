@@ -39,8 +39,22 @@
       </form>
 
       {% else %}
-        {% for text in effective %}
-          <h2>{{text}}</h2>
+        {% for obj in effective %}
+          <h2 style="color:green">{{obj['coeff']}}</h2>
+          
+          <table class="table">
+            <tr>
+              <th>Feature</th>
+              <th>Coefficient</th>
+            </tr>
+            {% for key, value in obj['json'].items() %}
+            <tr>
+              <td>{{ key }}</td>
+              <td>{{ value['Coefficient'] }}</td>
+            </tr>
+            {% endfor %}
+          </table>          
+
         {% endfor %}
         <br>
         {% for img in img_array %}

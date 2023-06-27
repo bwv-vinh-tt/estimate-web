@@ -124,7 +124,7 @@ def initCSV(uploaded_file):
 
     # write csv
     df = pd.DataFrame(convert_data)
-    file_path = os.path.join(root_dir,'resources' , 'data.csv')
+    file_path = os.path.join(root_dir, 'resources', 'data.csv')
 
     df.to_csv(file_path, index=False)
 
