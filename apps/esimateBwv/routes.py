@@ -8,7 +8,22 @@ from apps.service.csvProcess import checkIfAnyFieldEmptyInDict, compareEstimateF
 from apps.service.estimate import drawBoxPlot, estimate, trainModel
 from apps.service.utils import getUrlRedmine, get_chart_or_remove
 import urllib.parse
+import os
 
+# Check if directory exists
+directory1 = os.path.join(os.getcwd(),'apps', 'static', 'assets', 'images')
+directory2 = os.path.join(os.getcwd(),'resources')
+directory3 = os.path.join(os.getcwd(),'joblib')
+if not os.path.exists(directory1):
+    # Create the directory
+    os.makedirs(directory1)
+if not os.path.exists(directory2):
+    # Create the directory
+    os.makedirs(directory2)
+if not os.path.exists(directory3):
+    # Create the directory
+    os.makedirs(directory3)
+# End
 
 @blueprint.route('/estimate', methods=('GET', 'POST'))
 def renderEstimate():
