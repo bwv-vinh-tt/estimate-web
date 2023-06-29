@@ -1,71 +1,157 @@
-
-{% extends "layouts/base.html" %}
-{% block title %} Import {% endblock %} 
+{% extends "layouts/base.html" %} {% block title %} Import {% endblock %}
 
 <!-- Element injected in the BODY element -->
-{% block body_class %} {% endblock body_class %} 
+{% block body_class %} {% endblock body_class %}
 
 <!-- Specific Page CSS goes HERE  -->
 {% block stylesheets %}
 
-  <!-- Google Font: Source Sans Pro -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="/static/assets/plugins/fontawesome-free/css/all.min.css">
-  <!-- fullCalendar -->
-  <link rel="stylesheet" href="/static/assets/plugins/fullcalendar/main.min.css">
-  <link rel="stylesheet" href="/static/assets/plugins/fullcalendar-daygrid/main.min.css">
-  <link rel="stylesheet" href="/static/assets/plugins/fullcalendar-timegrid/main.min.css">
-  <link rel="stylesheet" href="/static/assets/plugins/fullcalendar-bootstrap/main.min.css">
-  <!-- Theme style -->
-  <link rel="stylesheet" href="/static/assets/css/adminlte.min.css">
+<!-- Google Font: Source Sans Pro -->
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback"
+/>
+<!-- Font Awesome -->
+<link
+  rel="stylesheet"
+  href="/static/assets/plugins/fontawesome-free/css/all.min.css"
+/>
+<!-- fullCalendar -->
+<link
+  rel="stylesheet"
+  href="/static/assets/plugins/fullcalendar/main.min.css"
+/>
+<link
+  rel="stylesheet"
+  href="/static/assets/plugins/fullcalendar-daygrid/main.min.css"
+/>
+<link
+  rel="stylesheet"
+  href="/static/assets/plugins/fullcalendar-timegrid/main.min.css"
+/>
+<link
+  rel="stylesheet"
+  href="/static/assets/plugins/fullcalendar-bootstrap/main.min.css"
+/>
+<!-- Theme style -->
+<link rel="stylesheet" href="/static/assets/css/adminlte.min.css" />
 
-{% endblock stylesheets %}
-
-  {% block content %}
-  <div class="container d-flex justify-content-center">
-    <div class="card px-1 py-4">
-      {% if not img%}
-      <h1> Upload CSV </h1>
-      <form name="uploadCSV" action="{{url_for('estimateBwv_blueprint.upload')}}" method="POST" enctype="multipart/form-data">
-        <input type="file" name="file" />
-        <input type="submit" />
-      </form>
-
-      <h1>Check boxPlot</h1>
-      <form name="uploadCheckBoxPlot" action="{{url_for('estimateBwv_blueprint.checkBoxPlot')}}" method="POST" enctype="multipart/form-data">
-        <input type="file" name="file" />
-        <input type="submit" />
-      </form>
-
-      {% else %}
-        {% for obj in effective %}
-          <h2 style="color:green">{{obj['coeff']}}</h2>
-          
-          <table class="table">
-            <tr>
-              <th>Feature</th>
-              <th>Coefficient</th>
-            </tr>
-            {% for key, value in obj['json'].items() %}
-            <tr>
-              <td>{{ key }}</td>
-              <td>{{ value['Coefficient'] }}</td>
-            </tr>
-            {% endfor %}
-          </table>          
-
-        {% endfor %}
-        <br>
-        {% for img in img_array %}
-        <h2>{{img}}</h2>
-          {% set url = urllib_parse.unquote(url_for('static', filename='assets/images/' + img)) %}
-          <img alt="Image" src="{{url}}">
-        {% endfor %}
-        
-      {%endif%}
+{% endblock stylesheets %} {% block content %}
+<div class="content-wrapper">
+  <section class="content container">
+    {% if not img%}
+  <div class="card card-primary">
+    <div class="card-header">
+      <h3 class="card-title">Upload CSV Training</h3>
     </div>
+    <!-- /.card-header -->
+    <!-- form start -->
+    <form
+      name="uploadCSV"
+      action="{{url_for('estimateBwv_blueprint.upload')}}"
+      method="POST"
+      enctype="multipart/form-data"
+    >
+      <div class="form-group">
+        <div class="input-group">
+          <div class="custom-file">
+            <input
+              name="file"
+              type="file"
+              class="custom-file-input"
+              id="exampleInputFile"
+            />
+            <label class="custom-file-label" for="exampleInputFile"
+              >Choose file</label
+            >
+          </div>
+          <div class="input-group-append">
+            <span class="input-group-text">Upload</span>
+          </div>
+        </div>
+      </div>
+      <!-- /.card-body -->
+      <div class="card-footer">
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </div>
+    </form>
   </div>
 
-  {% endblock %}
+  <div class="card card-danger">
+    <div class="card-header">
+      <h3 class="card-title">Upload CSV Box Plot</h3>
+    </div>
+    <!-- /.card-header -->
+    <!-- form start -->
+    <form
+      name="uploadCheckBoxPlot"
+      action="{{url_for('estimateBwv_blueprint.checkBoxPlot')}}"
+      method="POST"
+      enctype="multipart/form-data"
+    >
+      <div class="form-group">
+        <div class="input-group">
+          <div class="custom-file">
+            <input
+              name="file"
+              type="file"
+              class="custom-file-input"
+              id="exampleInputFile"
+            />
+            <label class="custom-file-label" for="exampleInputFile"
+              >Choose file</label
+            >
+          </div>
+          <div class="input-group-append">
+            <span class="input-group-text">Upload</span>
+          </div>
+        </div>
+      </div>
+      <!-- /.card-body -->
+      <div class="card-footer">
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </div>
+    </form>
+  </div>
+  {% else %} {% for obj in effective %}
+  <h2 style="color: green">{{obj['coeff']}}</h2>
 
+  <table class="table">
+    <tr>
+      <th>Feature</th>
+      <th>Coefficient</th>
+    </tr>
+    {% for key, value in obj['json'].items() %}
+    <tr>
+      <td>{{ key }}</td>
+      <td>{{ value['Coefficient'] }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+
+  {% endfor %}
+  <br />
+  {% for img in img_array %}
+  <h2>{{img}}</h2>
+  {% set url = urllib_parse.unquote(url_for('static', filename='assets/images/'
+  + img)) %}
+  <img alt="Image" src="{{url}}" />
+  {% endfor %} {%endif%}
+  </section>
+</div>
+
+{% endblock %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+<!-- bs-custom-file-input -->
+<script src="/static/assets/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
+
+<script>
+  $(function () {
+    bsCustomFileInput.init();
+  });
+</script>
+
+{% endblock javascripts %}

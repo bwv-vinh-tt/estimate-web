@@ -16,8 +16,6 @@
 <link rel="stylesheet" href="/static/assets/plugins/fullcalendar-daygrid/main.min.css">
 <link rel="stylesheet" href="/static/assets/plugins/fullcalendar-timegrid/main.min.css">
 <link rel="stylesheet" href="/static/assets/plugins/fullcalendar-bootstrap/main.min.css">
-<!-- Theme style -->
-<link rel="stylesheet" href="/static/assets/css/adminlte.min.css">
 
 <!-- iCheck for checkboxes and radio inputs -->
 <link rel="stylesheet" href="/static/assets/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
@@ -39,404 +37,411 @@
   {{result}}
 </div>
 {% endif %}
-<form id="estimateForm" action="{{ url_for('estimateBwv_blueprint.calc') }}" method="post">
-  <div class="container d-flex justify-content-center">
-    <div class="card px-1 py-4">
-      <h2 class="mb-3">Estimate Item</h2>
-      <div class="card-body">
-
-
-        <div class="row">
-          <div class="col-6">
-            <div class="form-group">
-              <div class="row">
-                <div class="col-6">
-                  <label>New/Mod</label>
-                </div>
-                <div class="col-6">
-                  <select name="new_mod" class="form-control">
-                    <option value="New" selected>New</option>
-                    <option value="Mod">Mod</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-6">
-            <div class="form-group">
-              <div class="row">
-                <div class="col-6">
-                  <label>Tracker</label>
-                </div>
-                <div class="col-6">
-                  <select name="tracker" class="form-control">
-                    <option value="Translation" selected>Translate</option>
-                    <option value="Coding">Coding</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-sm-6">
-            <div class="form-group">
-              <div class="row">
-                <div class="col-6">
-                  <label for="name">Create Screen/API/Batch Qty</label>
-                </div>
-                <div class="col-6">
-                  <input required name="create_screen_api_batch_qty" class="form-control" type="text" placeholder="">
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-sm-6">
-            <div class="form-group">
-              <div class="row">
-                <div class="col-6">
-                  <label for="Doc Mod Quantity">Doc Mod Quantity</label>
-                </div>
-                <div class="col-6">
-                  <input required name="doc_mod_quantity" class="form-control" type="text" placeholder="">
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="row mt-4">
-          <div class="col-sm-6">
-            <div class="form-group">
-              <div class="row">
-                <div class="col-6">
-                  <label for="name">Authority Qty</label>
-                </div>
-                <div class="col-6">
-                  <input required name="authority_qty" class="form-control" type="text" placeholder="">
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-sm-6">
-            <div class="form-group">
-              <div class="row">
-                <div class="col-6">
-                  <label for="name">Display/Output Items Qty</label>
-                </div>
-                <div class="col-6">
-                  <input required name="display_output_items_qty" class="form-control" type="text" placeholder="">
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="row mt-4">
-          <div class="col-sm-6">
-            <div class="form-group">
-              <div class="row">
-                <div class="col-6">
-                  <label for="name">Validation Items Qty</label>
-                </div>
-                <div class="col-6">
-                  <input required name="validation_items_qty" class="form-control" type="text" placeholder="">
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-sm-6">
-            <div class="form-group">
-              <div class="row">
-                <div class="col-6">
-                  <label for="name">Validation Qty</label>
-                </div>
-                <div class="col-6">
-                  <input required name="validation_qty" class="form-control" type="text" placeholder="">
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="row mt-4">
-          <div class="col-sm-6">
-            <div class="form-group">
-              <div class="row">
-                <div class="col-6">
-                  <label for="name">Event row</label>
-                </div>
-                <div class="col-6">
-                  <input required name="event_row" class="form-control" type="text" placeholder="">
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-6">
-            <div class="form-group">
-              <div class="row">
-                <div class="col-6">
-                  <label for="name">Event Items Qty</label>
-                </div>
-                <div class="col-6">
-                  <input required name="event_items_qty" class="form-control" type="text" placeholder="">
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="row mt-4">
-          <div class="col-sm-6">
-            <div class="form-group">
-              <div class="row">
-                <div class="col-6">
-                  <label for="name">Get API Qty</label>
-                </div>
-                <div class="col-6">
-                  <input required required name="get_api_qty" class="form-control" type="text" placeholder="">
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-6">
-            <div class="form-group">
-              <div class="row">
-                <div class="col-6">
-                  <label for="name">Create API Qty</label>
-                </div>
-                <div class="col-6">
-                  <input required required name="create_api_qty" class="form-control" type="text" placeholder="">
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-
-        <div class="row mt-4">
-          <div class="col-sm-6">
-            <div class="form-group">
-              <div class="row">
-                <div class="col-6">
-                  <label for="name">Update API Qty</label>
-                </div>
-                <div class="col-6">
-                  <input required required name="update_api_qty" class="form-control" type="text" placeholder="">
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-6">
-            <div class="form-group">
-              <div class="row">
-                <div class="col-6">
-                  <label for="name">Delete API Qty</label>
-                </div>
-                <div class="col-6">
-                  <input required name="delete_api_qty" class="form-control" type="text" placeholder="">
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="row mt-4">
-          <div class="col-sm-6">
-            <div class="form-group">
-              <div class="row">
-                <div class="col-6">
-                  <label for="name">Get Table Qty</label>
-                </div>
-                <div class="col-6">
-                  <input required name="get_table_qty" class="form-control" type="text" placeholder="">
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-6">
-            <div class="form-group">
-              <div class="row">
-                <div class="col-6">
-                  <label for="name">Create Table Qty</label>
-                </div>
-                <div class="col-6">
-                  <input required name="create_table_qty" class="form-control" type="text" placeholder="">
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-
-        <div class="row mt-4">
-          <div class="col-sm-6">
-            <div class="form-group">
-              <div class="row">
-                <div class="col-6">
-                  <label for="name">Update Table Qty</label>
-                </div>
-                <div class="col-6">
-                  <input required name="update_table_qty" class="form-control" type="text" placeholder="">
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-6">
-            <div class="form-group">
-              <div class="row">
-                <div class="col-6">
-                  <label for="name">Delete Table Qty</label>
-                </div>
-                <div class="col-6">
-                  <input required name="delete_table_qty" class="form-control" type="text" placeholder="">
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-
-        <div class="row mt-4">
-          <div class="col-sm-6">
-            <div class="form-group">
-              <div class="row">
-                <div class="col-6">
-                  <label for="name">Field DB Qty</label>
-                </div>
-                <div class="col-6">
-                  <input required name="field_db_qty" class="form-control" type="text" placeholder="">
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-sm-6">
-            <div class="form-group">
-              <div class="row">
-                <div class="col-6">
-                  <label for="name">Doc Layout</label>
-                </div>
-                <div class="col-6">
-                  <select name="doc_layout" class="form-select" aria-label="Default select example">
-                    <option value="1">BW</option>
-                    <option value="2">Non-BW(Readable)</option>
-                    <option value="3">Non-BW(Not Readable)</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="row mt-4">
-
-          <div class="col-sm-6">
-            <div class="form-group">
-              <div class="row">
-                <div class="col-6">
-                  <label for="name">Doc QA Amount</label>
-                </div>
-                <div class="col-6">
-                  <input required name="doc_qa_amount" class="form-control" type="text" placeholder="">
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-6">
-            <div class="form-group">
-              <div class="row">
-                <div class="col-6">
-                  <label for="name">Doc Understandable</label>
-                </div>
-                <div class="col-6">
-                  <select name="doc_understandable" class="form-select" aria-label="Default select example">
-                    <option value="0">0</option>
-                    <option value="20">20%</option>
-                    <option value="40">40%</option>
-                    <option value="60">60%</option>
-                    <option value="80">80%</option>
-                    <option value="100">100%</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="row mt-4">
-          <div class="col-sm-6">
-            <div class="form-group">
-              <div class="row">
-                <div class="col-6">
-                  <label title="Cannot convert to value, so disabled" for="name">Doc File Format</label>
-                </div>
-                <div class="col-6">
-                  <select disabled name="doc_file_format" class="form-select" aria-label="Default select example" multiple>
-                    <option value="Markdown">Markdown</option>
-                    <option value="Google Sheet">Google Sheet</option>
-                    <option value="Excel">Excel</option>
-                    <option value="Other">Other</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-
-          </div>
-
-          <div class="col-sm-6">
-            <div class="form-group">
-              <div class="row">
-                <div class="col-6">
-                  <label for="name">Business Logic Level</label>
-                </div>
-                <div class="col-6">
-                  <select name="business_logic_level" class="form-select" aria-label="Default select example">
-                    <option value="0">0</option>
-                    <option value="25">25%</option>
-                    <option value="50">50%</option>
-                    <option value="75">75%</option>
-                    <option value="100">100%</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="row mt-4 js-coding-method-level">
-          <div class="col-sm-6">
-          </div>
-          <div class="col-sm-6">
-            <div class="form-group">
-              <div class="row">
-                <div class="col-6">
-                  <label for="name">Coding Method Level</label>
-                </div>
-                <div class="col-6">
-                  <select name="coding_method_level" class="form-select" aria-label="Default select example">
-                    <option value="0">0</option>
-                    <option value="25">25%</option>
-                    <option value="50">50%</option>
-                    <option value="75">75%</option>
-                    <option value="100">100%</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+<div class="content-wrapper">
+  <div class="container ">
+    <div class="card card-primary">
+      <div class="card-header">
+        <h3 class="card-title">Quick Example</h3>
       </div>
-
-
-      <button id="submitEstimate" type="submit" class="btn btn-primary btn-block confirm-button">Calc</button>
+      <!-- /.card-header -->
+      <!-- form start -->
+      <form id="estimateForm" action="{{ url_for('estimateBwv_blueprint.calc') }}" method="post">
+        <div class="card-body">
+          
+          <div class="row">
+            <div class="col-6">
+              <div class="form-group">
+                <div class="row">
+                  <div class="col-6">
+                    <label>New/Mod</label>
+                  </div>
+                  <div class="col-6">
+                    <select name="new_mod" class="form-control">
+                      <option value="New" selected>New</option>
+                      <option value="Mod">Mod</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+  
+            <div class="col-6">
+              <div class="form-group">
+                <div class="row">
+                  <div class="col-6">
+                    <label>Tracker</label>
+                  </div>
+                  <div class="col-6">
+                    <select name="tracker" class="form-control">
+                      <option value="Translation" selected>Translate</option>
+                      <option value="Coding">Coding</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+  
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <div class="row">
+                  <div class="col-6">
+                    <label for="name">Create Screen/API/Batch Qty</label>
+                  </div>
+                  <div class="col-6">
+                    <input required name="create_screen_api_batch_qty" class="form-control" type="text" placeholder="">
+                  </div>
+                </div>
+              </div>
+            </div>
+  
+            <div class="col-sm-6">
+              <div class="form-group">
+                <div class="row">
+                  <div class="col-6">
+                    <label for="Doc Mod Quantity">Doc Mod Quantity</label>
+                  </div>
+                  <div class="col-6">
+                    <input required name="doc_mod_quantity" class="form-control" type="text" placeholder="">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+  
+          <div class="row mt-4">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <div class="row">
+                  <div class="col-6">
+                    <label for="name">Authority Qty</label>
+                  </div>
+                  <div class="col-6">
+                    <input required name="authority_qty" class="form-control" type="text" placeholder="">
+                  </div>
+                </div>
+              </div>
+            </div>
+  
+            <div class="col-sm-6">
+              <div class="form-group">
+                <div class="row">
+                  <div class="col-6">
+                    <label for="name">Display/Output Items Qty</label>
+                  </div>
+                  <div class="col-6">
+                    <input required name="display_output_items_qty" class="form-control" type="text" placeholder="">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+  
+          <div class="row mt-4">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <div class="row">
+                  <div class="col-6">
+                    <label for="name">Validation Items Qty</label>
+                  </div>
+                  <div class="col-6">
+                    <input required name="validation_items_qty" class="form-control" type="text" placeholder="">
+                  </div>
+                </div>
+              </div>
+            </div>
+  
+            <div class="col-sm-6">
+              <div class="form-group">
+                <div class="row">
+                  <div class="col-6">
+                    <label for="name">Validation Qty</label>
+                  </div>
+                  <div class="col-6">
+                    <input required name="validation_qty" class="form-control" type="text" placeholder="">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+  
+          <div class="row mt-4">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <div class="row">
+                  <div class="col-6">
+                    <label for="name">Event row</label>
+                  </div>
+                  <div class="col-6">
+                    <input required name="event_row" class="form-control" type="text" placeholder="">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <div class="row">
+                  <div class="col-6">
+                    <label for="name">Event Items Qty</label>
+                  </div>
+                  <div class="col-6">
+                    <input required name="event_items_qty" class="form-control" type="text" placeholder="">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+  
+          <div class="row mt-4">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <div class="row">
+                  <div class="col-6">
+                    <label for="name">Get API Qty</label>
+                  </div>
+                  <div class="col-6">
+                    <input required required name="get_api_qty" class="form-control" type="text" placeholder="">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <div class="row">
+                  <div class="col-6">
+                    <label for="name">Create API Qty</label>
+                  </div>
+                  <div class="col-6">
+                    <input required required name="create_api_qty" class="form-control" type="text" placeholder="">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+  
+  
+          <div class="row mt-4">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <div class="row">
+                  <div class="col-6">
+                    <label for="name">Update API Qty</label>
+                  </div>
+                  <div class="col-6">
+                    <input required required name="update_api_qty" class="form-control" type="text" placeholder="">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <div class="row">
+                  <div class="col-6">
+                    <label for="name">Delete API Qty</label>
+                  </div>
+                  <div class="col-6">
+                    <input required name="delete_api_qty" class="form-control" type="text" placeholder="">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+  
+          <div class="row mt-4">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <div class="row">
+                  <div class="col-6">
+                    <label for="name">Get Table Qty</label>
+                  </div>
+                  <div class="col-6">
+                    <input required name="get_table_qty" class="form-control" type="text" placeholder="">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <div class="row">
+                  <div class="col-6">
+                    <label for="name">Create Table Qty</label>
+                  </div>
+                  <div class="col-6">
+                    <input required name="create_table_qty" class="form-control" type="text" placeholder="">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+  
+  
+          <div class="row mt-4">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <div class="row">
+                  <div class="col-6">
+                    <label for="name">Update Table Qty</label>
+                  </div>
+                  <div class="col-6">
+                    <input required name="update_table_qty" class="form-control" type="text" placeholder="">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <div class="row">
+                  <div class="col-6">
+                    <label for="name">Delete Table Qty</label>
+                  </div>
+                  <div class="col-6">
+                    <input required name="delete_table_qty" class="form-control" type="text" placeholder="">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+  
+  
+          <div class="row mt-4">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <div class="row">
+                  <div class="col-6">
+                    <label for="name">Field DB Qty</label>
+                  </div>
+                  <div class="col-6">
+                    <input required name="field_db_qty" class="form-control" type="text" placeholder="">
+                  </div>
+                </div>
+              </div>
+            </div>
+  
+            <div class="col-sm-6">
+              <div class="form-group">
+                <div class="row">
+                  <div class="col-6">
+                    <label for="name">Doc Layout</label>
+                  </div>
+                  <div class="col-6">
+                    <select name="doc_layout" class="form-select" aria-label="Default select example">
+                      <option value="1">BW</option>
+                      <option value="2">Non-BW(Readable)</option>
+                      <option value="3">Non-BW(Not Readable)</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+  
+          <div class="row mt-4">
+  
+            <div class="col-sm-6">
+              <div class="form-group">
+                <div class="row">
+                  <div class="col-6">
+                    <label for="name">Doc QA Amount</label>
+                  </div>
+                  <div class="col-6">
+                    <input required name="doc_qa_amount" class="form-control" type="text" placeholder="">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <div class="row">
+                  <div class="col-6">
+                    <label for="name">Doc Understandable</label>
+                  </div>
+                  <div class="col-6">
+                    <select name="doc_understandable" class="form-select" aria-label="Default select example">
+                      <option value="0">0</option>
+                      <option value="20">20%</option>
+                      <option value="40">40%</option>
+                      <option value="60">60%</option>
+                      <option value="80">80%</option>
+                      <option value="100">100%</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+  
+          <div class="row mt-4">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <div class="row">
+                  <div class="col-6">
+                    <label title="Cannot convert to value, so disabled" for="name">Doc File Format</label>
+                  </div>
+                  <div class="col-6">
+                    <select disabled name="doc_file_format" class="form-select" aria-label="Default select example" multiple>
+                      <option value="Markdown">Markdown</option>
+                      <option value="Google Sheet">Google Sheet</option>
+                      <option value="Excel">Excel</option>
+                      <option value="Other">Other</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+  
+            </div>
+  
+            <div class="col-sm-6">
+              <div class="form-group">
+                <div class="row">
+                  <div class="col-6">
+                    <label for="name">Business Logic Level</label>
+                  </div>
+                  <div class="col-6">
+                    <select name="business_logic_level" class="form-select" aria-label="Default select example">
+                      <option value="0">0</option>
+                      <option value="25">25%</option>
+                      <option value="50">50%</option>
+                      <option value="75">75%</option>
+                      <option value="100">100%</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+  
+          <div class="row mt-4 js-coding-method-level">
+            <div class="col-sm-6">
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <div class="row">
+                  <div class="col-6">
+                    <label for="name">Coding Method Level</label>
+                  </div>
+                  <div class="col-6">
+                    <select name="coding_method_level" class="form-select" aria-label="Default select example">
+                      <option value="0">0</option>
+                      <option value="25">25%</option>
+                      <option value="50">50%</option>
+                      <option value="75">75%</option>
+                      <option value="100">100%</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- /.card-body -->
+  
+        <div class="card-footer">
+          <button id="submitEstimate" type="submit" class="btn btn-primary btn-block confirm-button">Calculate</button>
+        </div>
+      </form>
     </div>
   </div>
-</form>
+</div>
 
 {% endblock %}

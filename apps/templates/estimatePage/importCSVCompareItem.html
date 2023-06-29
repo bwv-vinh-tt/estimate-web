@@ -1,37 +1,95 @@
-
-{% extends "layouts/base.html" %}
-{% block title %} Import {% endblock %} 
+{% extends "layouts/base.html" %} {% block title %} Import {% endblock %}
 
 <!-- Element injected in the BODY element -->
-{% block body_class %} {% endblock body_class %} 
+{% block body_class %} {% endblock body_class %}
 
 <!-- Specific Page CSS goes HERE  -->
 {% block stylesheets %}
 
-  <!-- Google Font: Source Sans Pro -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="/static/assets/plugins/fontawesome-free/css/all.min.css">
-  <!-- fullCalendar -->
-  <link rel="stylesheet" href="/static/assets/plugins/fullcalendar/main.min.css">
-  <link rel="stylesheet" href="/static/assets/plugins/fullcalendar-daygrid/main.min.css">
-  <link rel="stylesheet" href="/static/assets/plugins/fullcalendar-timegrid/main.min.css">
-  <link rel="stylesheet" href="/static/assets/plugins/fullcalendar-bootstrap/main.min.css">
-  <!-- Theme style -->
-  <link rel="stylesheet" href="/static/assets/css/adminlte.min.css">
+<!-- Google Font: Source Sans Pro -->
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback"
+/>
+<!-- Font Awesome -->
+<link
+  rel="stylesheet"
+  href="/static/assets/plugins/fontawesome-free/css/all.min.css"
+/>
+<!-- fullCalendar -->
+<link
+  rel="stylesheet"
+  href="/static/assets/plugins/fullcalendar/main.min.css"
+/>
+<link
+  rel="stylesheet"
+  href="/static/assets/plugins/fullcalendar-daygrid/main.min.css"
+/>
+<link
+  rel="stylesheet"
+  href="/static/assets/plugins/fullcalendar-timegrid/main.min.css"
+/>
+<link
+  rel="stylesheet"
+  href="/static/assets/plugins/fullcalendar-bootstrap/main.min.css"
+/>
+<!-- Theme style -->
+<link rel="stylesheet" href="/static/assets/css/adminlte.min.css" />
 
-{% endblock stylesheets %}
-
-  {% block content %}
-  <div class="container d-flex justify-content-center">
-    <div class="card px-1 py-4">
-      <h1>Check Estimate Field Value</h1>
-      <form name="uploadCheckEsValue" action="{{url_for('estimateBwv_blueprint.checkEstimateFieldValue')}}" method="POST" enctype="multipart/form-data">
-        <input type="file" name="file" />
-        <input type="submit" />
+{% endblock stylesheets %} {% block content %}
+<div class="content-wrapper">
+  <section class="content container">
+    <div class="card card-primary">
+      <div class="card-header">
+        <h3 class="card-title">Upload CSV Compare</h3>
+      </div>
+      <!-- /.card-header -->
+      <!-- form start -->
+      <form
+        name="uploadCheckEsValue"
+        action="{{url_for('estimateBwv_blueprint.checkEstimateFieldValue')}}"
+        method="POST"
+        enctype="multipart/form-data"
+      >
+        <div class="form-group">
+          <div class="input-group">
+            <div class="custom-file">
+              <input
+                name="file"
+                type="file"
+                class="custom-file-input"
+                id="exampleInputFile"
+              />
+              <label class="custom-file-label" for="exampleInputFile"
+                >Choose file</label
+              >
+            </div>
+            <div class="input-group-append">
+              <span class="input-group-text">Upload</span>
+            </div>
+          </div>
+        </div>
+        <!-- /.card-body -->
+        <div class="card-footer">
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
       </form>
     </div>
-  </div>
+  </section>
+</div>
 
-  {% endblock %}
+{% endblock %}
 
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+<!-- bs-custom-file-input -->
+<script src="/static/assets/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
+
+<script>
+  $(function () {
+    bsCustomFileInput.init();
+  });
+</script>
+
+{% endblock javascripts %}

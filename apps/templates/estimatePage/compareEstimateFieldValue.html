@@ -1,85 +1,125 @@
-{% extends "layouts/base.html" %}
-{% block title %} Estimate {% endblock %} 
+{% extends "layouts/base.html" %} {% block title %} Estimate {% endblock %}
 
 <!-- Element injected in the BODY element -->
-{% block body_class %} {% endblock body_class %} 
+{% block body_class %} {% endblock body_class %}
 
 <!-- Specific Page CSS goes HERE  -->
 {% block stylesheets %}
 
-  <!-- Google Font: Source Sans Pro -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="/static/assets/plugins/fontawesome-free/css/all.min.css">
-  <!-- fullCalendar -->
-  <link rel="stylesheet" href="/static/assets/plugins/fullcalendar/main.min.css">
-  <link rel="stylesheet" href="/static/assets/plugins/fullcalendar-daygrid/main.min.css">
-  <link rel="stylesheet" href="/static/assets/plugins/fullcalendar-timegrid/main.min.css">
-  <link rel="stylesheet" href="/static/assets/plugins/fullcalendar-bootstrap/main.min.css">
-    <!-- DataTables -->
-    <link rel="stylesheet" href="/static/assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
-    <link rel="stylesheet" href="/static/assets/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
-  <!-- Theme style -->
-  <link rel="stylesheet" href="/static/assets/css/adminlte.min.css">
+<!-- Google Font: Source Sans Pro -->
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback"
+/>
+<!-- Font Awesome -->
+<link
+  rel="stylesheet"
+  href="/static/assets/plugins/fontawesome-free/css/all.min.css"
+/>
+<!-- fullCalendar -->
+<link
+  rel="stylesheet"
+  href="/static/assets/plugins/fullcalendar/main.min.css"
+/>
+<link
+  rel="stylesheet"
+  href="/static/assets/plugins/fullcalendar-daygrid/main.min.css"
+/>
+<link
+  rel="stylesheet"
+  href="/static/assets/plugins/fullcalendar-timegrid/main.min.css"
+/>
+<link
+  rel="stylesheet"
+  href="/static/assets/plugins/fullcalendar-bootstrap/main.min.css"
+/>
+<!-- DataTables -->
+<link
+  rel="stylesheet"
+  href="/static/assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css"
+/>
+<link
+  rel="stylesheet"
+  href="/static/assets/plugins/datatables-responsive/css/responsive.bootstrap4.min.css"
+/>
+<link
+  rel="stylesheet"
+  href="/static/assets/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css"
+/>
 
+<!-- Theme style -->
+<link rel="stylesheet" href="/static/assets/css/adminlte.min.css" />
 
-{% endblock stylesheets %}
-
-  {% block content %}
+{% endblock stylesheets %} {% block content %}
+<div class="content-wrapper">
   <div class="container d-flex justify-content-center">
-    <div style="width: 100%;" class="card px-1 py-4">
-     <h1>Result compare</h1>
-    
-     <ul>
-      <li style="font-weight: bold;color:red">Red-text: Task has atleast ONE EMPTY value OR Conflict between [New/Mod] vs [Doc Mod Quantity]</li>
-     </ul>
-     <table style="table-layout: fixed;" id="resultTable" class="table table-bordered table-hover dataTable dtr-inline table-striped">
-      <thead>
-        <tr>
-          <th width="100px">Parent</th>
-          <th width="100px">Coding</th>
-          <th width="100px">Translation</th>
-          <th>Difference item</th>
-        </tr>
-      </thead>
-       <tbody>
-        {% for value in result %}
-       <tr>
-        <td><a href="{{getUrlRedmine(value['Parent task'])}}">{{value['Parent task']}}</a></td>
-        <td class='{% if checkIfAnyFieldEmptyInDict(value["Target coding task"]["Data"]) %} red-text {% endif %}'>
-          <a href="{{getUrlRedmine(value['Target coding task']['Issue'])}}">
-            {{value['Target coding task']['Issue']}}
-          </a>
-        </td>
-        <td class='{% if checkIfAnyFieldEmptyInDict(value["Target translate task"]["Data"]) %} red-text {% endif %}'>
-          <a href="{{getUrlRedmine(value['Target translate task']['Issue'])}}">
-            {{value['Target translate task']['Issue']}}
-          </a>
-        </td>
-        {% set diffLst = value['Difference item'].split(',') %}
-        <td>
-          {% if diffLst|length > 0 %}
-          <ul>
-            {% for diff in diffLst %}
-              {% if diff != '' %}
-              <li>{{diff}}</li>
+    <div style="width: 100%" class="card px-1 py-4">
+      <h1 class="font-weight">Result compare</h1>
+
+      <ul>
+        <li style="font-weight: bold; color: red">
+          Red-text: Task has atleast ONE EMPTY value OR Conflict between
+          [New/Mod] vs [Doc Mod Quantity]
+        </li>
+      </ul>
+      <table
+        style="table-layout: fixed"
+        id="resultTable"
+        class="table table-bordered table-hover dataTable dtr-inline table-striped"
+      >
+        <thead>
+          <tr>
+            <th width="100px">Parent</th>
+            <th width="100px">Coding</th>
+            <th width="100px">Translation</th>
+            <th>Difference item</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for value in result %}
+          <tr>
+            <td>
+              <a href="{{getUrlRedmine(value['Parent task'])}}"
+                >{{value['Parent task']}}</a
+              >
+            </td>
+            <td
+              class="{% if checkIfAnyFieldEmptyInDict(value['Target coding task']['Data']) %} red-text {% endif %}"
+            >
+              <a href="{{getUrlRedmine(value['Target coding task']['Issue'])}}">
+                {{value['Target coding task']['Issue']}}
+              </a>
+            </td>
+            <td
+              class="{% if checkIfAnyFieldEmptyInDict(value['Target translate task']['Data']) %} red-text {% endif %}"
+            >
+              <a
+                href="{{getUrlRedmine(value['Target translate task']['Issue'])}}"
+              >
+                {{value['Target translate task']['Issue']}}
+              </a>
+            </td>
+            {% set diffLst = value['Difference item'].split(',') %}
+            <td>
+              {% if diffLst|length > 0 %}
+              <ul>
+                {% for diff in diffLst %} {% if diff != '' %}
+                <li>{{diff}}</li>
+                {% endif %} {% endfor %}
+              </ul>
               {% endif %}
-            {% endfor %}
-          </ul>
-          {% endif %}
-        </td>
-      </tr>
-      {% endfor %}
-       </tbody>
-      
-    </table>
-    
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
     </div>
   </div>
+</div>
 
-  {% endblock %}
+{% endblock %}
 
-  <!-- Specific Page JS goes HERE  -->
+<!-- Specific Page JS goes HERE  -->
 {% block javascripts %}
 <!-- jQuery -->
 <script src="/static/assets/plugins/jquery/jquery.min.js"></script>
@@ -91,26 +131,25 @@
 <script src="/static/assets/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
 <script src="/static/assets/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
 <!-- AdminLTE App -->
-<script src="/static/assets/js/adminlte.min.js"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="/static/assets/js/demo.js"></script>
 <script>
   $(function () {
-    $('#resultTable').DataTable({
-      "paging": true,
-      "lengthChange": false,
-      "searching": false,
-      "ordering": false,
-      "info": true,
-      "autoWidth": false,
-      "responsive": true,
-      "columnDefs": [
-      { "width": "100px", "targets": [0] },
-      { "width": "100px", "targets": [1] },
-      { "width": "100px", "targets": [2] },
+    $("#resultTable").DataTable({
+      paging: true,
+      lengthChange: false,
+      searching: false,
+      ordering: false,
+      info: true,
+      autoWidth: false,
+      responsive: true,
+      columnDefs: [
+        { width: "100px", targets: [0] },
+        { width: "100px", targets: [1] },
+        { width: "100px", targets: [2] },
       ],
-      "scrollY": '500px',
-        scrollCollapse: true,
+      scrollY: "500px",
+      scrollCollapse: true,
     });
   });
 </script>
