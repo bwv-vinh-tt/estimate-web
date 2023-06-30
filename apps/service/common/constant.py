@@ -49,7 +49,8 @@ CONST_REDMINE_URL = 'https://redmine.bridevelopment.com/issues/'
 CONST_IGNORE_FIELD = [
     'Business Logic Level',
     'Coding Method Level',
-    'Doc Understandable']
+    'Doc Understandable',
+    'Doc QA Amount']
 
 
 def FILE_NAME(tracker, new_mod):

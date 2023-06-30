@@ -143,7 +143,6 @@ def readCSVAndTrainModel(
             columns=['Coefficient'])
         # print(f'COEFF_{tracker}_{new_mod}:', coeff_df)
         dict_result = coeff_df.to_dict(orient='index')
-        print(dict_result)
         cf.go_offline()
         pio.renderers.default = "colab"
         df = pd.DataFrame(

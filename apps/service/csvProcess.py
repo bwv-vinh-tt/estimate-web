@@ -103,8 +103,6 @@ class RedmineTask:
 
 def initCSV(uploaded_file):
     CSV_IMPORT = pd.read_csv(uploaded_file)
-    print(CSV_IMPORT.columns)
-    print(CONST_LABEL_FROM_REDMINE_ARR.__len__())
 
     CSV_IMPORT.columns = py_.map_(
         CONST_LABEL_FROM_REDMINE_ARR,
@@ -145,7 +143,6 @@ def compareEstimateFieldFromCSV(uploaded_file):
         result[label] = group.to_dict(orient='records')
 
     # Process compare Data return Only [Subject] -> [Different Item]
-    print(result)
     for key, value in initList:
         classRedText = ''
         keys_diff = None
