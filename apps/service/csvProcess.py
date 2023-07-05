@@ -136,12 +136,12 @@ def compareEstimateFieldFromCSV(uploaded_file):
     CSV_IMPORT_GROUP_BY_PARENT_TASK = CSV_IMPORT.groupby(['Subject'])
     RESULT_RETURN = []
     result = {}
-    initList = result.items()
     # Parent task, target coding task, target coding task, difference item
 
     for label, group in CSV_IMPORT_GROUP_BY_PARENT_TASK:
         result[label] = group.to_dict(orient='records')
 
+    initList = result.items()
     # Process compare Data return Only [Subject] -> [Different Item]
     for key, value in initList:
         classRedText = ''
@@ -160,8 +160,7 @@ def compareEstimateFieldFromCSV(uploaded_file):
 
             if classRedText != '' or keys_diff is not None:
                 RESULT_RETURN.append({
-                    #  'Parent task': int(key) if isinstance(key, float) else key,
-                    'Parent task': int(value[0]['Parent task']) if isinstance(value[0]['Parent task'], float) else '',
+                    'Parent task': str(value[0]['Parent task']).split('.')[0],
                     'Target coding task': getTrackerFromDict(find_dict(value, lambda d: d["Tracker"] == "Coding"))['Target coding task'],
                     'Target translate task': getTrackerFromDict(find_dict(value, lambda d: d["Tracker"] == "Translation"))['Target translation task'],
                     'Difference item': ','.join([str(key) for key in keys_diff]) if keys_diff is not None else '',
@@ -171,8 +170,7 @@ def compareEstimateFieldFromCSV(uploaded_file):
             for item in value:
                 if checkIfAnyFieldEmptyInDict(item) is not None:
                     RESULT_RETURN.append({
-                        # 'Parent task': int(key) if isinstance(key, float) else key,
-                        'Parent task': int(value[0]['Parent task']) if isinstance(value[0]['Parent task'], float) else '',
+                        'Parent task': str(value[0]['Parent task']).split('.')[0],
                         'Target coding task': getTrackerFromDict(item)['Target coding task'] if check is not None else {},
                         'Target translate task': getTrackerFromDict(item)['Target translation task'] if check is not None else {},
                         'Difference item': ','.join([str(key) for key in keys_diff]) if keys_diff is not None else '',
