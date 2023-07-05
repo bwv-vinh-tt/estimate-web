@@ -159,13 +159,22 @@ def compareEstimateFieldFromCSV(uploaded_file):
                 value[0], value[1])
 
             if classRedText != '' or keys_diff is not None:
-                RESULT_RETURN.append({
-                    'Parent task': str(value[0]['Parent task']).split('.')[0],
-                    'Target coding task': getTrackerFromDict(find_dict(value, lambda d: d["Tracker"] == "Coding"))['Target coding task'],
-                    'Target translate task': getTrackerFromDict(find_dict(value, lambda d: d["Tracker"] == "Translation"))['Target translation task'],
-                    'Difference item': ','.join([str(key) for key in keys_diff]) if keys_diff is not None else '',
-                    'class': classRedText
-                })
+                RESULT_RETURN.append(
+                    {
+                        'Parent task': str(
+                            value[0]['Parent task']).split('.')[0],
+                        'Target coding task': getTrackerFromDict(
+                            find_dict(
+                                value,
+                                lambda d: d["Tracker"] == "Coding"))['Target coding task'],
+                        'Target translate task': getTrackerFromDict(
+                            find_dict(
+                                value,
+                                lambda d: d["Tracker"] == "Translation"))['Target translation task'],
+                        'Difference item': ','.join(
+                                [
+                                    str(key) for key in keys_diff]) if keys_diff is not None else '',
+                        'class': classRedText})
         else:
             for item in value:
                 if checkIfAnyFieldEmptyInDict(item) is not None:

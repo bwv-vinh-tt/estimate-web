@@ -18,7 +18,7 @@ from apps.authentication.util import verify_pass
 
 @blueprint.route('/')
 def route_default():
-    return redirect(url_for('estimateBwv_blueprint.renderEstimate'))
+    return redirect(url_for('estimateBwv_blueprint.checkEstimateFieldValue'))
 
 
 # Login & Registration

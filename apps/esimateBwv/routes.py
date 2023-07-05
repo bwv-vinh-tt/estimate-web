@@ -27,6 +27,7 @@ if not os.path.exists(directory3):
 
 
 @blueprint.route('/estimate', methods=('GET', 'POST'))
+@login_required
 def renderEstimate():
 
     return render_template('estimatePage/estimate.html', segment='estimate')
