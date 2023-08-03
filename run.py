@@ -1,4 +1,5 @@
 import os
+from flask import render_template
 from flask_migrate import Migrate
 from flask_minify import Minify
 from sys import exit
@@ -27,6 +28,23 @@ except KeyError:
     exit('Error: Invalid <config_mode>. Expected values [Debug, Production] ')
 
 app = create_app(app_config)
+
+# Errors
+
+@app.errorhandler(403)
+def access_forbidden(error):
+    return render_template('home/page-403.html'), 403
+
+
+@app.errorhandler(404)
+def not_found_error(error):
+    return render_template('error/404.html'), 404
+
+
+@app.errorhandler(500)
+def internal_error(error):
+    return render_template('home/page-500.html' , error=error), 500
+
 Migrate(app, db)
 
 if not DEBUG:

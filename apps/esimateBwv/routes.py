@@ -1,8 +1,8 @@
 
 from apps.esimateBwv import blueprint
-from flask import render_template, request
+from flask import abort, render_template, request
 from flask_login import login_required
-from jinja2 import TemplateNotFound
+from apps.service.common.constant import CONST_LABEL_CHECKED_ESTIMATION_ITEMS, MIN_ESTIMATE_TIME
 from apps.service.csvProcess import checkIfAnyFieldEmptyInDict, compareEstimateFieldFromCSV, initCSV
 
 from apps.service.estimate import drawBoxPlot, estimate, trainModel
@@ -44,9 +44,13 @@ def calc():
     if request.method == 'GET':
         return render_template('estimatePage/estimate.html')
     else:
-        result = estimate(request.form)
-        data = {'result': result[0] / 60}
-        return data
+        try:
+            result = estimate(request.form)
+            result = result[0] / 60 if result[0] / 60 > 0 else MIN_ESTIMATE_TIME
+            data = {'result': result}
+            return data
+        except Exception as e:
+            return {'error': 'Model not found'}
 
 
 @blueprint.route('/upload', methods=['POST'])
@@ -54,7 +58,7 @@ def calc():
 def upload():
     file = request.files['file']
     if not file:
-        return 'No file uploaded'
+        return abort(500, 'No file uploaded')
     elif not file.filename.endswith('.csv'):
         return 'File is not a CSV file'
     else:
@@ -75,9 +79,9 @@ def upload():
 def checkBoxPlot():
     file = request.files['file']
     if not file:
-        return 'No file uploaded'
+        return abort(500, 'No file uploaded')
     elif not file.filename.endswith('.csv'):
-        return 'File is not a CSV file'
+        return abort(500, 'File is not a CSV file')
     else:
         initCSV(file)
         drawBoxPlot()
@@ -86,24 +90,31 @@ def checkBoxPlot():
 
 @blueprint.route('/checkEstimateFieldValue', methods=['POST', 'GET'])
 def checkEstimateFieldValue():
-    if request.method == 'POST':
-        file = request.files['file']
-        if not file:
-            return 'No file uploaded'
-        elif not file.filename.endswith('.csv'):
-            return 'File is not a CSV file'
+    try:
+        if request.method == 'POST':
+            file = request.files['file']
+            if not file:
+                return abort(500, 'No file uploaded')
+            elif not file.filename.endswith('.csv'):
+                return abort(500, 'File is not a CSV file')
+            else:
+                result = compareEstimateFieldFromCSV(request.files['file'])
+                # sort by class red-text
+                resultSorted = sorted(
+                    result,
+                    key=lambda k: (
+                        k['class'] == '',
+                        k[CONST_LABEL_CHECKED_ESTIMATION_ITEMS] != 'No'),
+                    )
+                return render_template(
+                    "estimatePage/compareEstimateFieldValue.html",
+                    result=resultSorted,
+                    getUrlRedmine=getUrlRedmine,
+                    segment='checkEstimateFieldValue',
+                    checkIfAnyFieldEmptyInDict=checkIfAnyFieldEmptyInDict)
         else:
-            result = compareEstimateFieldFromCSV(request.files['file'])
-            # sort by class red-text
-            resultSorted = sorted(
-                result, key=lambda k: k['class'], reverse=True)
             return render_template(
-                "estimatePage/compareEstimateFieldValue.html",
-                result=resultSorted,
-                getUrlRedmine=getUrlRedmine,
-                segment='checkEstimateFieldValue',
-                checkIfAnyFieldEmptyInDict=checkIfAnyFieldEmptyInDict)
-    else:
-        return render_template(
-            'estimatePage/importCSVCompareItem.html',
-            segment='checkEstimateFieldValue')
+                'estimatePage/importCSVCompareItem.html',
+                segment='checkEstimateFieldValue')
+    except Exception as e:
+        abort(500, e)

@@ -5,7 +5,16 @@
 
 <!-- Specific Page CSS goes HERE  -->
 {% block stylesheets %}
+<style>
+  table tfoot th > input {
+    width: 100%;
+  }
 
+  table tfoot th select {
+    width: 100%;
+  }
+  
+</style>
 <!-- Google Font: Source Sans Pro -->
 <link
   rel="stylesheet"
@@ -44,7 +53,7 @@
 />
 <link
   rel="stylesheet"
-  href="/static/assets/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css"
+  href="/static/assets/css/datatables.responsive.css"
 />
 
 <!-- Theme style -->
@@ -69,15 +78,18 @@
       >
         <thead>
           <tr>
-            <th width="100px">Parent</th>
-            <th width="100px">Coding</th>
-            <th width="100px">Translation</th>
-            <th>Difference item</th>
+            <th width="7%">Parent</th>
+            <th width="7%">Coding</th>
+            <th width="15%">Coder</th>
+            <th width="8%">Translation</th>
+            <th width="15%">Translator</th>
+            <th width="">Difference item</th>
+            <th width="7%">Checked</th>
           </tr>
         </thead>
         <tbody>
           {% for value in result %}
-          <tr>
+          <tr class="{% if value['Target translation task']['Checked Estimation Items'] == 'Yes' %} yes-row {% endif %}">
             <td>
               <a href="{{getUrlRedmine(value['Parent task'])}}"
                 >{{value['Parent task']}}</a
@@ -90,14 +102,20 @@
                 {{value['Target coding task']['Issue']}}
               </a>
             </td>
+            <td>
+              {{value['Target coding task']['Assignee']}}
+            </td>
             <td
-              class="{% if checkIfAnyFieldEmptyInDict(value['Target translate task']['Data']) %} red-text {% endif %}"
+              class="{% if checkIfAnyFieldEmptyInDict(value['Target translation task']['Data']) %} red-text {% endif %}"
             >
               <a
-                href="{{getUrlRedmine(value['Target translate task']['Issue'])}}"
+                href="{{getUrlRedmine(value['Target translation task']['Issue'])}}"
               >
-                {{value['Target translate task']['Issue']}}
+                {{value['Target translation task']['Issue']}}
               </a>
+            </td>
+            <td>
+              {{value['Target translation task']['Assignee']}}
             </td>
             {% set diffLst = value['Difference item'].split(',') %}
             <td>
@@ -109,9 +127,21 @@
               </ul>
               {% endif %}
             </td>
+            <td class="text-center">{{value['Checked Estimation Items']}}</td>
           </tr>
           {% endfor %}
         </tbody>
+        <tfoot>
+          <tr>
+            <th width="7%">Parent</th>
+            <th width="7%">Coding</th>
+            <th width="15%">Coder</th>
+            <th width="8%">Translation</th>
+            <th width="15%">Translator</th>
+            <th>Difference item</th>
+            <th width="7%">Checked</th>
+          </tr>
+      </tfoot>
       </table>
     </div>
   </div>
@@ -133,25 +163,7 @@
 <!-- AdminLTE App -->
 <!-- AdminLTE for demo purposes -->
 <script src="/static/assets/js/demo.js"></script>
-<script>
-  $(function () {
-    $("#resultTable").DataTable({
-      paging: true,
-      lengthChange: false,
-      searching: false,
-      ordering: false,
-      info: true,
-      autoWidth: false,
-      responsive: true,
-      columnDefs: [
-        { width: "100px", targets: [0] },
-        { width: "100px", targets: [1] },
-        { width: "100px", targets: [2] },
-      ],
-      scrollY: "500px",
-      scrollCollapse: true,
-    });
-  });
-</script>
+<!-- custom script -->
+<script src="/static/assets/js/compareEstimateFieldValue.js"></script>
 
 {% endblock javascripts %}

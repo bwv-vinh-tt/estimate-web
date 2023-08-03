@@ -18,8 +18,9 @@ def convert_to_snake_case(arr):
 # Contant variable
 
 
-CONST_LABEL_FROM_REDMINE = '#,Parent task,Tracker,Subject,Spent time,Total estimated time,Total spent time,Assignee,Create Screen/API/Batch Qty,New/Mod,Doc Mod Quantity,Authority Qty,Display/Output Items Qty,Validation Items Qty,Event row,Event Items Qty,Get API Qty,Create API Qty,Update API Qty,Delete API Qty,Get Table Qty,Create Table Qty,Update Table Qty,Delete Table Qty,Doc Layout,Doc QA Amount,Doc Understandable,Doc File Format,Business Logic Level,Coding Method Level,Validation Qty,Field DB Qty'
-CONST_LABEL_ESTIMATION_FIELD = 'Create Screen/API/Batch Qty,New/Mod,Doc Mod Quantity,Authority Qty,Display/Output Items Qty,Validation Items Qty,Validation Qty,Event row,Event Items Qty,Get API Qty,Create API Qty,Update API Qty,Delete API Qty,Get Table Qty,Create Table Qty,Update Table Qty,Delete Table Qty,Field DB Qty,Doc Layout,Doc QA Amount,Doc Understandable,Doc File Format,Business Logic Level,Coding Method Level'
+CONST_LABEL_FROM_REDMINE = '#,Parent task,Tracker,Subject,Spent time,Total estimated time,Total spent time,Assignee,Create Scr/API/B/R Qty,New/Mod,Doc Mod Quantity,Authority Qty,Display/Output Items Qty,Validation Items Qty,Event row,Event Items Qty,Get API Qty,Create API Qty,Update API Qty,Delete API Qty,Get Table Qty,Create Table Qty,Update Table Qty,Delete Table Qty,Doc Layout,Doc QA Amount,Doc Understandable,Doc File Format,Business Logic Level,Coding Method Level,Validation Qty,Field DB Qty'
+
+CONST_LABEL_ESTIMATION_FIELD = 'Create Scr/API/B/R Qty,New/Mod,Doc Mod Quantity,Authority Qty,Display/Output Items Qty,Validation Items Qty,Validation Qty,Event row,Event Items Qty,Get API Qty,Create API Qty,Update API Qty,Delete API Qty,Get Table Qty,Create Table Qty,Update Table Qty,Delete Table Qty,Field DB Qty,Doc Layout,Doc QA Amount,Doc Understandable,Doc File Format,Business Logic Level,Coding Method Level'
 
 CONST_LABEL_FROM_REDMINE_ARR = CONST_LABEL_FROM_REDMINE.split(',')
 
@@ -40,8 +41,9 @@ CONST_LABEL_NEW = 'New'
 CONST_LABEL_MOD = 'Mod'
 
 CONST_LABEL = {
-    'LABEL001': 'Target coding task',
-    'LABEL002': 'Target translation task',
+    'TARGET_TRANSLATION_TASK': 'Target translation task',
+    'TARGET_CODING_TASK': 'Target coding task',
+    'CODING': 'Coding',
 }
 
 CONST_REDMINE_URL = 'https://redmine.bridevelopment.com/issues/'
@@ -51,6 +53,12 @@ CONST_IGNORE_FIELD = [
     'Coding Method Level',
     'Doc Understandable',
     'Doc QA Amount']
+
+CONST_LABEL_CHECKED_ESTIMATION_ITEMS = 'Checked Estimation Items'
+
+CONST_LABEL_CHECKED_ESTIMATION_ITEMS_VALUE_YES = ['Yes', 'はい']
+
+CONST_LABEL_CHECKED_ESTIMATION_ITEMS_VALUE_NO = ['No', 'いいえ']
 
 
 def FILE_NAME(tracker, new_mod):
@@ -74,3 +82,5 @@ CONST_CHART_IMAGE_NAME = [
     'chart_Translation_New.png',
     'chart_Translation_Mod.png',
 ]
+
+MIN_ESTIMATE_TIME = 0.5

@@ -38,7 +38,7 @@
 
 {% endblock stylesheets %} {% block content %}
 <div class="content-wrapper">
-  <section class="content container">
+  <section class="container content-header">
     <div class="card card-primary">
       <div class="card-header">
         <h3 class="card-title">Upload CSV Compare</h3>
@@ -73,6 +73,8 @@
       </form>
     </div>
 
+    <hr>
+    
     <h1>How to use ?</h1>
     <div class="card card-danger collapsed-card">
       <div class="card-header">
@@ -144,7 +146,40 @@
 
 <script>
   $(function () {
-    bsCustomFileInput.init();
+    var FILE_SELECTED = false;
+    $('#exampleInputFile').on('click touchstart' , function(){
+      $(this).val('');
+    });
+    // event when page show remove file from input
+    // event file change jQuery
+    $('form[name="uploadCheckEsValue"] input[name="file"]').change(function(e){
+      // convert this line to Jquery syntax
+      var file = $(this).val();
+      // check file is exist
+      if(file != ''){
+        FILE_SELECTED = true;
+        // get file name
+        var fileName = file.split('\\').pop();
+        // set file name to label
+        $(this).next('.custom-file-label').html(fileName);
+      }
+      else{
+        FILE_SELECTED = false;
+        // remove label text
+        $(this).next('.custom-file-label').html('Choose file');
+      }
+    });
+
+    $(document).on('click', 'form[name="uploadCheckEsValue"] button[type="submit"]', function(e){
+      e.stopPropagation();
+      e.preventDefault();
+      if(!FILE_SELECTED){
+        alert('Please select file');
+        return false;
+      }
+      FILE_SELECTED = false;
+      $('form[name="uploadCheckEsValue"]').submit();
+    })
   });
 </script>
 

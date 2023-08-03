@@ -5,3 +5,7 @@
 .hide {
   display: none !important;
 }
+
+.yes-row{
+  background-color: antiquewhite !important;
+}

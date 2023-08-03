@@ -4,7 +4,7 @@ import pandas as pd
 # from pytesseract import pytesseract, Output
 import numpy as np
 import os
-from .common.constant import CONST_LABEL_EXPECTED, CONST_REDMINE_URL, CONST_CHART_IMAGE_NAME, root_dir
+from .common.constant import CONST_LABEL_CHECKED_ESTIMATION_ITEMS_VALUE_NO, CONST_LABEL_CHECKED_ESTIMATION_ITEMS_VALUE_YES, CONST_LABEL_EXPECTED, CONST_REDMINE_URL, CONST_CHART_IMAGE_NAME, root_dir
 
 
 def convert_data_redmine(row):
@@ -19,8 +19,8 @@ def convert_data_redmine(row):
     if hasattr(result, CONST_LABEL_EXPECTED):
         result[CONST_LABEL_EXPECTED] = getValueZeroIfNan(
             result[CONST_LABEL_EXPECTED]) * 60
-    result['create_screen_api_batch_qty'] = getValueZeroIfNan(
-        result['create_screen_api_batch_qty'])
+    result['create_scr_api_b_r_qty'] = getValueZeroIfNan(
+        result['create_scr_api_b_r_qty'])
     result['doc_mod_quantity'] = getValueZeroIfNan(result['doc_mod_quantity'])
     result['authority_qty'] = getValueZeroIfNan(result['authority_qty'])
     result['display_output_items_qty'] = getValueZeroIfNan(
@@ -123,3 +123,12 @@ def get_chart_or_remove(removeFlag: bool = False):
                 os.remove(PATH_FILE)
             result.append(name)
     return result
+
+
+def getCheckedEstimationFlagValue(value):
+    if value in CONST_LABEL_CHECKED_ESTIMATION_ITEMS_VALUE_YES:
+        return 'Yes'
+    elif value in CONST_LABEL_CHECKED_ESTIMATION_ITEMS_VALUE_NO:
+        return 'No'
+    else:
+        return None

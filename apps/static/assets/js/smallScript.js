@@ -1,6 +1,6 @@
 function getData() {
   const array = [];
-  const label = ['Create Screen/API/Batch Qty', 'New/Mod', 'Doc Mod Quantity', 'Authority Qty',
+  const label = ['Create Scr/API/B/R Qty', 'New/Mod', 'Doc Mod Quantity', 'Authority Qty',
       'Display/Output Items Qty', 'Validation Items Qty', 'Event row', 'Event Items Qty', 'Get API Qty', 'Create API Qty',
       'Update API Qty', 'Delete API Qty', 'Get Table Qty', 'Create Table Qty', 'Update Table Qty', 'Delete Table Qty', 'Doc Layout',
       'Doc Layout', 'Doc Understandable', 'Doc File Format', 'Business Logic Level', 'Coding Method Level', 'Spent time'];

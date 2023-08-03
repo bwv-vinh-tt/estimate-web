@@ -1,7 +1,7 @@
 import pandas as pd
 import pydash as py_
-from .utils import convert_data_redmine, find_dict
-from .common.constant import CONST_IGNORE_FIELD, CONST_LABEL_FROM_REDMINE, CONST_LABEL_ESTIMATION_FIELD, CONST_LABEL, CONST_LABEL_FROM_REDMINE_ARR, CONST_REDMINE_URL, CONST_LABEL_EXPECTED
+from .utils import convert_data_redmine, find_dict, getCheckedEstimationFlagValue
+from .common.constant import CONST_IGNORE_FIELD, CONST_LABEL_CHECKED_ESTIMATION_ITEMS_VALUE_YES, CONST_LABEL_FROM_REDMINE, CONST_LABEL_ESTIMATION_FIELD, CONST_LABEL, CONST_LABEL_FROM_REDMINE_ARR, CONST_REDMINE_URL, CONST_LABEL_EXPECTED, CONST_LABEL_CHECKED_ESTIMATION_ITEMS
 from itertools import groupby
 import os
 
@@ -12,7 +12,7 @@ label = [
     '#',
     'Tracker',
     'Spent time',
-    'Create Screen/API/Batch Qty',
+    'Create Scr/API/B/R Qty',
     'New/Mod',
     'Doc Mod Quantity',
     'Authority Qty',
@@ -33,14 +33,15 @@ label = [
     'Doc Understandable',
     'Doc File Format',
     'Business Logic Level',
-    'Coding Method Level']
+    'Coding Method Level',
+    'Checked Estimation Items']
 
 
 class RedmineTask:
     def __init__(self,
                  tracker='',
                  spent_time=0,
-                 create_screen_api_batch_qty=0,
+                 create_scr_api_b_r_qty=0,
                  new_mod='',
                  doc_mod_quantity=0,
                  authority_qty=0,
@@ -66,7 +67,7 @@ class RedmineTask:
                  coding_method_level=0):
         self.tracker = tracker
         self.spent_time = spent_time
-        self.create_screen_api_batch_qty = create_screen_api_batch_qty
+        self.create_scr_api_b_r_qty = create_scr_api_b_r_qty
         self.new_mod = new_mod
         self.doc_mod_quantity = doc_mod_quantity
         self.authority_qty = authority_qty
@@ -103,7 +104,9 @@ class RedmineTask:
 
 def initCSV(uploaded_file):
     CSV_IMPORT = pd.read_csv(uploaded_file)
-
+    # remove record has CONST_LABEL_CHECKED_ESTIMATION_ITEMS != Yes
+    CSV_IMPORT = CSV_IMPORT[CSV_IMPORT[CONST_LABEL_CHECKED_ESTIMATION_ITEMS].isin(CONST_LABEL_CHECKED_ESTIMATION_ITEMS_VALUE_YES)]
+    CSV_IMPORT = CSV_IMPORT[CONST_LABEL_FROM_REDMINE_ARR]
     CSV_IMPORT.columns = py_.map_(
         CONST_LABEL_FROM_REDMINE_ARR,
         lambda v: py_.snake_case(v))
@@ -133,6 +136,9 @@ def compareEstimateFieldFromCSV(uploaded_file):
     CSV_IMPORT = pd.read_csv(uploaded_file)
     # filter None data -> Empty string
     CSV_IMPORT = CSV_IMPORT.fillna('')
+    # remove record has CONST_LABEL_CHECKED_ESTIMATION_ITEMS = '' from
+    # CSV_IMPORT
+    CSV_IMPORT = CSV_IMPORT[CSV_IMPORT[CONST_LABEL_CHECKED_ESTIMATION_ITEMS] != '']
     CSV_IMPORT_GROUP_BY_PARENT_TASK = CSV_IMPORT.groupby(['Subject'])
     RESULT_RETURN = []
     result = {}
@@ -143,6 +149,49 @@ def compareEstimateFieldFromCSV(uploaded_file):
 
     initList = result.items()
     # Process compare Data return Only [Subject] -> [Different Item]
+    # for key, value in initList:
+    #     classRedText = ''
+    #     keys_diff = None
+    #     check = {}
+
+    #     # only compare if have 2 item in Parent task
+    #     if len(value) == 2:
+    #         for item in value:
+    #             check = checkIfAnyFieldEmptyInDict(item)
+    #             if check is not None:
+    #                 classRedText = 'red-text'
+
+    #         keys_diff = compareCodingAndTranslateInOneGroupParentTask(
+    #             value[0], value[1])
+
+    #         if classRedText != '' or keys_diff is not None:
+    #             RESULT_RETURN.append(
+    #                 {
+    #                     'Parent task': str(
+    #                         value[0]['Parent task']).split('.')[0],
+    #                     'Target coding task': getTrackerFromDict(
+    #                         find_dict(
+    #                             value,
+    #                             lambda d: d["Tracker"] == "Coding"))['Target coding task'],
+    #                     'Target translation task': getTrackerFromDict(
+    #                         find_dict(
+    #                             value,
+    #                             lambda d: d["Tracker"] == "Translation"))['Target translation task'],
+    #                     'Difference item': ','.join(
+    #                             [
+    #                                 str(key) for key in keys_diff]) if keys_diff is not None else '',
+    #                     'class': classRedText})
+    #     else:
+    #         for item in value:
+    #             if checkIfAnyFieldEmptyInDict(item) is not None:
+    #                 RESULT_RETURN.append({
+    #                     'Parent task': str(value[0]['Parent task']).split('.')[0],
+    #                     'Target coding task': getTrackerFromDict(item)['Target coding task'] if check is not None else {},
+    #                     'Target translation task': getTrackerFromDict(item)['Target translation task'] if check is not None else {},
+    #                     'Difference item': ','.join([str(key) for key in keys_diff]) if keys_diff is not None else '',
+    #                     'class': 'red-text'
+    #                 })
+
     for key, value in initList:
         classRedText = ''
         keys_diff = None
@@ -158,33 +207,45 @@ def compareEstimateFieldFromCSV(uploaded_file):
             keys_diff = compareCodingAndTranslateInOneGroupParentTask(
                 value[0], value[1])
 
-            if classRedText != '' or keys_diff is not None:
-                RESULT_RETURN.append(
-                    {
-                        'Parent task': str(
-                            value[0]['Parent task']).split('.')[0],
-                        'Target coding task': getTrackerFromDict(
-                            find_dict(
-                                value,
-                                lambda d: d["Tracker"] == "Coding"))['Target coding task'],
-                        'Target translate task': getTrackerFromDict(
-                            find_dict(
-                                value,
-                                lambda d: d["Tracker"] == "Translation"))['Target translation task'],
-                        'Difference item': ','.join(
-                                [
-                                    str(key) for key in keys_diff]) if keys_diff is not None else '',
-                        'class': classRedText})
+            # if checkIfEstimationCheckIsNone(
+            #         value[0]) is None and checkIfEstimationCheckIsNone(
+            #         value[1]) is None:
+            #     continue
+
+            obj = {
+                'Parent task': str(
+                    value[0]['Parent task']).split('.')[0],
+                CONST_LABEL['TARGET_CODING_TASK']: getTrackerFromDict(
+                    find_dict(
+                        value,
+                        lambda d: d["Tracker"] == "Coding"))[CONST_LABEL['TARGET_CODING_TASK']],
+                CONST_LABEL['TARGET_TRANSLATION_TASK']: getTrackerFromDict(
+                    find_dict(
+                        value,
+                        lambda d: d["Tracker"] == "Translation"))[CONST_LABEL['TARGET_TRANSLATION_TASK']],
+                'Difference item': ','.join(
+                    [
+                        str(key) for key in keys_diff]) if keys_diff is not None else '',
+                'class': classRedText}
+            obj[CONST_LABEL_CHECKED_ESTIMATION_ITEMS] = 'No' if py_.get(
+                obj, 'Target coding task.Checked Estimation Items') == 'No' or py_.get(
+                obj, 'Target translation task.Checked Estimation Items') == 'No' else 'Yes'
+            RESULT_RETURN.append(obj)
         else:
             for item in value:
-                if checkIfAnyFieldEmptyInDict(item) is not None:
-                    RESULT_RETURN.append({
+                # if checkIfEstimationCheckIsNone(item) is not None:
+                    obj = {
                         'Parent task': str(value[0]['Parent task']).split('.')[0],
-                        'Target coding task': getTrackerFromDict(item)['Target coding task'] if check is not None else {},
-                        'Target translate task': getTrackerFromDict(item)['Target translation task'] if check is not None else {},
+                        CONST_LABEL['TARGET_CODING_TASK']: getTrackerFromDict(item)[CONST_LABEL['TARGET_CODING_TASK']],
+                        CONST_LABEL['TARGET_TRANSLATION_TASK']: getTrackerFromDict(item)[CONST_LABEL['TARGET_TRANSLATION_TASK']],
                         'Difference item': ','.join([str(key) for key in keys_diff]) if keys_diff is not None else '',
-                        'class': 'red-text'
-                    })
+                        'class': 'red-text' if checkIfAnyFieldEmptyInDict(item) is not None else ''
+                    }
+                    obj[CONST_LABEL_CHECKED_ESTIMATION_ITEMS] = 'No' if py_.get(
+                        obj, 'Target coding task.Checked Estimation Items') == 'No' or py_.get(
+                        obj, 'Target translation task.Checked Estimation Items') == 'No' else 'Yes'
+
+                    RESULT_RETURN.append(obj)
     return RESULT_RETURN
 
 
@@ -218,33 +279,47 @@ def checkIfAnyFieldEmptyInDict(
         if (value == '' and key in label) or check_conflict:
             return {
                 'Key': key,
-                'Target coding task': value if tracker == 'Coding' else '',
-                'Target translation task': value if tracker == 'Translation' else ''}
+                CONST_LABEL['TARGET_CODING_TASK']: value if tracker == 'Coding' else '',
+                CONST_LABEL['TARGET_TRANSLATION_TASK']: value if tracker == 'Translation' else ''}
     return None
+
+
+def checkIfEstimationCheckIsNone(
+        dict):
+    if len(dict) == 0:
+        return None
+
+    flag = dict[CONST_LABEL_CHECKED_ESTIMATION_ITEMS]
+    return None if flag == '' else flag
 
 
 def getTrackerFromDict(dict):
     result = {
-        'Target translation task': {
+        CONST_LABEL['TARGET_TRANSLATION_TASK']: {
             'Issue': '',
-            'Data': {}
+            'Data': {},
+            'Assignee': '',
+            CONST_LABEL_CHECKED_ESTIMATION_ITEMS: ''
         },
-        'Target coding task': {
+        CONST_LABEL['TARGET_CODING_TASK']: {
             'Issue': '',
-            'Data': {}
+            'Data': {},
+            'Assignee': '',
+            CONST_LABEL_CHECKED_ESTIMATION_ITEMS: ''
         }
     }
     try:
+        obj = {
+            'Issue': dict['#'],
+            'Data': dict,
+            'Assignee': dict['Assignee'],
+            CONST_LABEL_CHECKED_ESTIMATION_ITEMS: getCheckedEstimationFlagValue(
+                dict[CONST_LABEL_CHECKED_ESTIMATION_ITEMS])}
+
         if dict['Tracker'] == 'Translation':
-            result['Target translation task'] = {
-                'Issue': dict['#'],
-                'Data': dict
-            }
+            result[CONST_LABEL['TARGET_TRANSLATION_TASK']] = obj
         else:
-            result['Target coding task'] = {
-                'Issue': dict['#'],
-                'Data': dict
-            }
+            result[CONST_LABEL['TARGET_CODING_TASK']] = obj
     except BaseException:
         pass
     return result

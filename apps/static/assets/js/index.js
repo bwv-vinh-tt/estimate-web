@@ -67,7 +67,9 @@ jQuery.fn.extend({
           type: 'post',
           data: data,
           success: function( v ){
-              // alert(`${v.result}  (Hours)`);
+              if(v.error){
+                return Swal.fire(`${v.error}`);
+              }
               return Swal.fire(`${v.result}  (Hours)`);
 
           },

@@ -23,30 +23,24 @@
 
   <div class="login-box">
 
-    <div class="login-logo">
-        <a target="_blank" rel="noopener noreferrer" 
-           href="#">Flask <b>Admin</b>LTE</a>
-    </div>
-
     <!-- /.login-logo -->
     <div class="card">
 
       <div class="card-body login-card-body">
 
         <h5 class="login-box-msg">
-          Error 500 - Server Error
+          Error 500 - Server Error <br />
+          {% if error and error['description'] %}
+            <br />
+            {{ error['description']['description'] }}
+          {% endif %}
         </h5>
         <p class="login-box-msg">
           Please contact support - <a href="/" class="text-center">Home</a>
         </p>
 
         <br />
-        <div class="text-center">
-            &copy; ColorLib 
-            <a target="_blank" rel="noopener noreferrer"
-               href="#"><b>Admin</b>LTE</a> 
-            - coded by <a href="#">#</a>.
-        </div>
+       
 
       </div>
       <!-- /.login-card-body -->
