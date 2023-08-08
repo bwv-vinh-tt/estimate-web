@@ -21,7 +21,7 @@
   
 # Description
 
-Project has 3 main screens:
+Project has 4 main screens:
  1. Import & Training data (Admin)
  2. Estimate by model trained (All user)
  3. Compare estimation fields from redmine (All user)
