@@ -2,7 +2,7 @@ import pandas as pd
 import pydash as py_
 from .utils import convert_data_redmine, find_dict, getCheckedEstimationFlagValue
 from .common.constant import CONST_IGNORE_FIELD, CONST_LABEL_CHECKED_ESTIMATION_ITEMS_VALUE_YES, CONST_LABEL_FROM_REDMINE, CONST_LABEL_ESTIMATION_FIELD, CONST_LABEL, CONST_LABEL_FROM_REDMINE_ARR, CONST_REDMINE_URL, CONST_LABEL_EXPECTED, CONST_LABEL_CHECKED_ESTIMATION_ITEMS
-from itertools import groupby
+import copy
 import os
 
 # Get the directory path of the current script file
@@ -105,7 +105,8 @@ class RedmineTask:
 def initCSV(uploaded_file):
     CSV_IMPORT = pd.read_csv(uploaded_file)
     # remove record has CONST_LABEL_CHECKED_ESTIMATION_ITEMS != Yes
-    CSV_IMPORT = CSV_IMPORT[CSV_IMPORT[CONST_LABEL_CHECKED_ESTIMATION_ITEMS].isin(CONST_LABEL_CHECKED_ESTIMATION_ITEMS_VALUE_YES)]
+    CSV_IMPORT = CSV_IMPORT[CSV_IMPORT[CONST_LABEL_CHECKED_ESTIMATION_ITEMS].isin(
+        CONST_LABEL_CHECKED_ESTIMATION_ITEMS_VALUE_YES)]
     CSV_IMPORT = CSV_IMPORT[CONST_LABEL_FROM_REDMINE_ARR]
     CSV_IMPORT.columns = py_.map_(
         CONST_LABEL_FROM_REDMINE_ARR,
@@ -148,50 +149,6 @@ def compareEstimateFieldFromCSV(uploaded_file):
         result[label] = group.to_dict(orient='records')
 
     initList = result.items()
-    # Process compare Data return Only [Subject] -> [Different Item]
-    # for key, value in initList:
-    #     classRedText = ''
-    #     keys_diff = None
-    #     check = {}
-
-    #     # only compare if have 2 item in Parent task
-    #     if len(value) == 2:
-    #         for item in value:
-    #             check = checkIfAnyFieldEmptyInDict(item)
-    #             if check is not None:
-    #                 classRedText = 'red-text'
-
-    #         keys_diff = compareCodingAndTranslateInOneGroupParentTask(
-    #             value[0], value[1])
-
-    #         if classRedText != '' or keys_diff is not None:
-    #             RESULT_RETURN.append(
-    #                 {
-    #                     'Parent task': str(
-    #                         value[0]['Parent task']).split('.')[0],
-    #                     'Target coding task': getTrackerFromDict(
-    #                         find_dict(
-    #                             value,
-    #                             lambda d: d["Tracker"] == "Coding"))['Target coding task'],
-    #                     'Target translation task': getTrackerFromDict(
-    #                         find_dict(
-    #                             value,
-    #                             lambda d: d["Tracker"] == "Translation"))['Target translation task'],
-    #                     'Difference item': ','.join(
-    #                             [
-    #                                 str(key) for key in keys_diff]) if keys_diff is not None else '',
-    #                     'class': classRedText})
-    #     else:
-    #         for item in value:
-    #             if checkIfAnyFieldEmptyInDict(item) is not None:
-    #                 RESULT_RETURN.append({
-    #                     'Parent task': str(value[0]['Parent task']).split('.')[0],
-    #                     'Target coding task': getTrackerFromDict(item)['Target coding task'] if check is not None else {},
-    #                     'Target translation task': getTrackerFromDict(item)['Target translation task'] if check is not None else {},
-    #                     'Difference item': ','.join([str(key) for key in keys_diff]) if keys_diff is not None else '',
-    #                     'class': 'red-text'
-    #                 })
-
     for key, value in initList:
         classRedText = ''
         keys_diff = None
@@ -218,11 +175,13 @@ def compareEstimateFieldFromCSV(uploaded_file):
                 CONST_LABEL['TARGET_CODING_TASK']: getTrackerFromDict(
                     find_dict(
                         value,
-                        lambda d: d["Tracker"] == "Coding"))[CONST_LABEL['TARGET_CODING_TASK']],
+                        lambda d: d["Tracker"] == "Coding"))[
+                    CONST_LABEL['TARGET_CODING_TASK']],
                 CONST_LABEL['TARGET_TRANSLATION_TASK']: getTrackerFromDict(
                     find_dict(
                         value,
-                        lambda d: d["Tracker"] == "Translation"))[CONST_LABEL['TARGET_TRANSLATION_TASK']],
+                        lambda d: d["Tracker"] == "Translation"))[
+                    CONST_LABEL['TARGET_TRANSLATION_TASK']],
                 'Difference item': ','.join(
                     [
                         str(key) for key in keys_diff]) if keys_diff is not None else '',
@@ -234,23 +193,28 @@ def compareEstimateFieldFromCSV(uploaded_file):
         else:
             for item in value:
                 # if checkIfEstimationCheckIsNone(item) is not None:
-                    obj = {
-                        'Parent task': str(value[0]['Parent task']).split('.')[0],
-                        CONST_LABEL['TARGET_CODING_TASK']: getTrackerFromDict(item)[CONST_LABEL['TARGET_CODING_TASK']],
-                        CONST_LABEL['TARGET_TRANSLATION_TASK']: getTrackerFromDict(item)[CONST_LABEL['TARGET_TRANSLATION_TASK']],
-                        'Difference item': ','.join([str(key) for key in keys_diff]) if keys_diff is not None else '',
-                        'class': 'red-text' if checkIfAnyFieldEmptyInDict(item) is not None else ''
-                    }
-                    obj[CONST_LABEL_CHECKED_ESTIMATION_ITEMS] = 'No' if py_.get(
-                        obj, 'Target coding task.Checked Estimation Items') == 'No' or py_.get(
-                        obj, 'Target translation task.Checked Estimation Items') == 'No' else 'Yes'
+                obj = {
+                    'Parent task': str(
+                        value[0]['Parent task']).split('.')[0],
+                    CONST_LABEL['TARGET_CODING_TASK']: getTrackerFromDict(item)[
+                        CONST_LABEL['TARGET_CODING_TASK']],
+                    CONST_LABEL['TARGET_TRANSLATION_TASK']: getTrackerFromDict(item)[
+                        CONST_LABEL['TARGET_TRANSLATION_TASK']],
+                    'Difference item': ','.join(
+                        [
+                            str(key) for key in keys_diff]) if keys_diff is not None else '',
+                    'class': 'red-text' if checkIfAnyFieldEmptyInDict(item) is not None else ''}
+                obj[CONST_LABEL_CHECKED_ESTIMATION_ITEMS] = 'No' if py_.get(
+                    obj, 'Target coding task.Checked Estimation Items') == 'No' or py_.get(
+                    obj, 'Target translation task.Checked Estimation Items') == 'No' else 'Yes'
 
-                    RESULT_RETURN.append(obj)
+                RESULT_RETURN.append(obj)
     return RESULT_RETURN
 
 
 def compareCodingAndTranslateInOneGroupParentTask(
-        dict1, dict2, label=CONST_LABEL_ESTIMATION_FIELD.split(',')):
+        dict1, dict2):
+    label = copy.deepcopy(CONST_LABEL_ESTIMATION_FIELD.split(','))
     # compare 2 dict
     label = [item for item in label if item not in CONST_IGNORE_FIELD]
     values_diff = {
@@ -262,7 +226,8 @@ def compareCodingAndTranslateInOneGroupParentTask(
 
 
 def checkIfAnyFieldEmptyInDict(
-        dict, label=CONST_LABEL_ESTIMATION_FIELD.split(',')):
+        dict):
+    label = copy.deepcopy(CONST_LABEL_ESTIMATION_FIELD.split(','))
     """Check if any field empty in dict OR conflict between New_Mod and Doc_mod_quantity"""
     if len(dict) == 0:
         return None
@@ -272,7 +237,7 @@ def checkIfAnyFieldEmptyInDict(
     check_conflict = True if (
         new_mod == 'New' and dict['Doc Mod Quantity'] != 0) or (
         new_mod == 'Mod' and dict['Doc Mod Quantity'] == 0) else False
-    removeLabel = 'Coding Method Level' if tracker == 'Coding' else 'Business Logic Level'
+    removeLabel = 'Coding Method Level' if tracker == 'Translation' else 'Business Logic Level'
     if removeLabel in label:
         label.remove(removeLabel)
     for key, value in dict.items():

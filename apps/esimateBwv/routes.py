@@ -46,7 +46,8 @@ def calc():
     else:
         try:
             result = estimate(request.form)
-            result = result[0] / 60 if result[0] / 60 > 0 else MIN_ESTIMATE_TIME
+            result = result[0] / 60 if result[0] / \
+                60 > 0 else MIN_ESTIMATE_TIME
             data = {'result': result}
             return data
         except Exception as e:
@@ -105,7 +106,7 @@ def checkEstimateFieldValue():
                     key=lambda k: (
                         k['class'] == '',
                         k[CONST_LABEL_CHECKED_ESTIMATION_ITEMS] != 'No'),
-                    )
+                )
                 return render_template(
                     "estimatePage/compareEstimateFieldValue.html",
                     result=resultSorted,

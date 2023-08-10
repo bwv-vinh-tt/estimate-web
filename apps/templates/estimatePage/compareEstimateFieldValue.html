@@ -89,7 +89,7 @@
         </thead>
         <tbody>
           {% for value in result %}
-          <tr class="{% if value['Target translation task']['Checked Estimation Items'] == 'Yes' %} yes-row {% endif %}">
+          <tr class="{% if value['Checked Estimation Items'] == 'Yes' %} yes-row {% endif %}">
             <td>
               <a href="{{getUrlRedmine(value['Parent task'])}}"
                 >{{value['Parent task']}}</a
