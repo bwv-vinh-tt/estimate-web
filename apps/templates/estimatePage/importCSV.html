@@ -40,74 +40,147 @@
 <div class="content-wrapper">
   <section class="content-header container">
     {% if not img%}
-  <div class="card card-primary">
-    <div class="card-header">
-      <h3 class="card-title">Upload CSV Training</h3>
-    </div>
-    <!-- /.card-header -->
-    <!-- form start -->
-    <form
-      name="uploadCSV"
-      action="{{url_for('estimateBwv_blueprint.upload')}}"
-      method="POST"
-      enctype="multipart/form-data"
-    >
-      <div class="form-group">
-        <div class="input-group">
-          <div class="custom-file">
-            <input
-              name="file"
-              type="file"
-              class="custom-file-input"
-              id="exampleInputFile"
-            />
-            <label class="custom-file-label" for="exampleInputFile"
-              >Choose file</label
-            >
+      {% if 'importCSV' in subSegment %}
+        <div class="card card-primary">
+          <div class="card-header">
+            <h3 class="card-title">Upload CSV Training</h3>
           </div>
+          <!-- /.card-header -->
+          <!-- form start -->
+          <form
+            name="uploadCSV"
+            action="{{url_for('estimateBwv_blueprint.upload')}}"
+            method="POST"
+            enctype="multipart/form-data"
+          >
+            <div class="form-group">
+              <div class="input-group">
+                <div class="custom-file">
+                  <input
+                    name="file"
+                    type="file"
+                    class="custom-file-input"
+                    id="trainCSV"
+                  />
+                  <label class="custom-file-label" for="trainCSV"
+                    >Choose file</label
+                  >
+                </div>
+              </div>
+            </div>
+            <!-- /.card-body -->
+            <div class="card-footer">
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+          </form>
         </div>
-      </div>
-      <!-- /.card-body -->
-      <div class="card-footer">
-        <button type="submit" class="btn btn-primary">Submit</button>
-      </div>
-    </form>
-  </div>
 
-  <div class="card card-danger">
-    <div class="card-header">
-      <h3 class="card-title">Upload CSV Box Plot</h3>
-    </div>
-    <!-- /.card-header -->
-    <!-- form start -->
-    <form
-      name="uploadCheckBoxPlot"
-      action="{{url_for('estimateBwv_blueprint.checkBoxPlot')}}"
-      method="POST"
-      enctype="multipart/form-data"
-    >
-      <div class="form-group">
-        <div class="input-group">
-          <div class="custom-file">
-            <input
-              name="file"
-              type="file"
-              class="custom-file-input"
-              id="exampleInputFile"
-            />
-            <label class="custom-file-label" for="exampleInputFile"
-              >Choose file</label
-            >
+        <div class="card card-danger">
+          <div class="card-header">
+            <h3 class="card-title">Upload CSV Box Plot</h3>
           </div>
-    
+          <!-- /.card-header -->
+          <!-- form start -->
+          <form
+            name="uploadCheckBoxPlot"
+            action="{{url_for('estimateBwv_blueprint.checkBoxPlot')}}"
+            method="POST"
+            enctype="multipart/form-data"
+          >
+            <div class="form-group">
+              <div class="input-group">
+                <div class="custom-file">
+                  <input
+                    name="file"
+                    type="file"
+                    class="custom-file-input"
+                    id="exampleInputFile"
+                  />
+                  <label class="custom-file-label" for="exampleInputFile"
+                    >Choose file</label
+                  >
+                </div>
+          
+              </div>
+            </div>
+            <!-- /.card-body -->
+            <div class="card-footer">
+              <button type="submit" class="btn btn-danger">Submit</button>
+            </div>
+          </form>
         </div>
-      </div>
-      <!-- /.card-body -->
-      <div class="card-footer">
-        <button type="submit" class="btn btn-primary">Submit</button>
-      </div>
-    </form>
-  </div>
+
+        <div class="card card-info">
+          <div class="card-header">
+            <h3 class="card-title">Estimate by CSV</h3>
+          </div>
+          <!-- /.card-header -->
+          <!-- form start -->
+          <form
+            name="estimateCSV"
+            action="{{url_for('estimateBwv_blueprint.estimateCSV')}}"
+            method="POST"
+            enctype="multipart/form-data"
+          >
+            <div class="form-group">
+              <div class="input-group">
+                <div class="custom-file">
+                  <input
+                    name="file"
+                    type="file"
+                    class="custom-file-input"
+                    id="estimateCSV"
+                  />
+                  <label class="custom-file-label" for="estimateCSV"
+                    >Choose file</label
+                  >
+                </div>
+          
+              </div>
+            </div>
+            <!-- /.card-body -->
+            <div class="card-footer">
+              <button type="submit" class="btn btn-info">Submit</button>
+            </div>
+          </form>
+        </div>
+        {%elif 'exportReport' in subSegment%}
+
+        <div class="card card-success">
+          <div class="card-header">
+            <h3 class="card-title">Report Result by CSV</h3>
+          </div>
+          <!-- /.card-header -->
+          <!-- form start -->
+          <form
+            name="reportResultFromCSV"
+            action="{{url_for('estimateBwv_blueprint.reportResultFromCSV')}}"
+            method="POST"
+            enctype="multipart/form-data"
+          >
+            <div class="form-group">
+              <div class="input-group">
+                <div class="custom-file">
+                  <input
+                    name="file"
+                    type="file"
+                    class="custom-file-input"
+                    id="reportResultFromCSV"
+                  />
+                  <label class="custom-file-label" for="reportResultFromCSV"
+                    >Choose file</label
+                  >
+                </div>
+          
+              </div>
+            </div>
+            <!-- /.card-body -->
+            <div class="card-footer">
+              <button type="submit" class="btn btn-success">Submit</button>
+            </div>
+          </form>
+        </div>
+      {%endif%}
   {% else %} {% for obj in effective %}
   <h2 style="color: green">{{obj['coeff']}}</h2>
 
@@ -146,6 +219,11 @@
 <script>
   $(function () {
     bsCustomFileInput.init();
+  });
+
+  $(document).on('click', 'button[type="submit"]', function () {
+    $.LoadingOverlay("show");
+    $(this).parents('form').submit();
   });
 </script>
 

@@ -1,7 +1,7 @@
 import pandas as pd
 import pydash as py_
 from .utils import convert_data_redmine, find_dict, getCheckedEstimationFlagValue
-from .common.constant import CONST_IGNORE_FIELD, CONST_LABEL_CHECKED_ESTIMATION_ITEMS_VALUE_YES, CONST_LABEL_FROM_REDMINE, CONST_LABEL_ESTIMATION_FIELD, CONST_LABEL, CONST_LABEL_FROM_REDMINE_ARR, CONST_REDMINE_URL, CONST_LABEL_EXPECTED, CONST_LABEL_CHECKED_ESTIMATION_ITEMS
+from .common.constant import CONST_IGNORE_FIELD, CONST_LABEL_ASSIGNEE, CONST_LABEL_CHECKED_ESTIMATION_ITEMS_VALUE_YES, CONST_LABEL_ESTIMATED_TIME, CONST_LABEL_FROM_REDMINE, CONST_LABEL_ESTIMATION_FIELD, CONST_LABEL, CONST_LABEL_FROM_REDMINE_ARR, CONST_LABEL_ISSUE_NUMBER, CONST_LABEL_NEW_MOD_FROM_INPUT, CONST_LABEL_TRACKER_FROM_INPUT, CONST_REDMINE_URL, CONST_LABEL_EXPECTED, CONST_LABEL_CHECKED_ESTIMATION_ITEMS
 import copy
 import os
 
@@ -102,11 +102,14 @@ class RedmineTask:
         return f"{self.spent_time}"
 
 
-def initCSV(uploaded_file):
+def initCSV(uploaded_file, isTrainingFile=True):
     CSV_IMPORT = pd.read_csv(uploaded_file)
+    CSV_IMPORT = CSV_IMPORT.drop_duplicates()
     # remove record has CONST_LABEL_CHECKED_ESTIMATION_ITEMS != Yes
-    CSV_IMPORT = CSV_IMPORT[CSV_IMPORT[CONST_LABEL_CHECKED_ESTIMATION_ITEMS].isin(
-        CONST_LABEL_CHECKED_ESTIMATION_ITEMS_VALUE_YES)]
+    if isTrainingFile:
+        CSV_IMPORT = CSV_IMPORT[CSV_IMPORT[CONST_LABEL_CHECKED_ESTIMATION_ITEMS].isin(
+            CONST_LABEL_CHECKED_ESTIMATION_ITEMS_VALUE_YES)]
+
     CSV_IMPORT = CSV_IMPORT[CONST_LABEL_FROM_REDMINE_ARR]
     CSV_IMPORT.columns = py_.map_(
         CONST_LABEL_FROM_REDMINE_ARR,
@@ -114,7 +117,8 @@ def initCSV(uploaded_file):
     convert_data = []
     for index, row in CSV_IMPORT.iterrows():
         # remove bad data
-        if row[CONST_LABEL_EXPECTED] == 0 or pd.isna(row['new_mod']):
+        if (row[CONST_LABEL_EXPECTED] ==
+                0 and isTrainingFile) or pd.isna(row[CONST_LABEL_NEW_MOD_FROM_INPUT]):
             continue
         row = convert_data_redmine(row)
         new_record = RedmineTask()
@@ -122,19 +126,28 @@ def initCSV(uploaded_file):
             col = '#' if py_.snake_case(col) == '' else py_.snake_case(col)
             if hasattr(new_record, col):
                 new_record.__setitem__(col, row[col])
+            if not isTrainingFile:
+                new_record[CONST_LABEL_ISSUE_NUMBER] = row['']
+                new_record[CONST_LABEL_ASSIGNEE] = row[CONST_LABEL_ASSIGNEE]
+                new_record[CONST_LABEL_TRACKER_FROM_INPUT] = row[CONST_LABEL_TRACKER_FROM_INPUT]
+                new_record[py_.snake_case(CONST_LABEL_ESTIMATED_TIME)] = row[py_.snake_case(CONST_LABEL_ESTIMATED_TIME)]
         convert_data.append(new_record.__dict__)
 
-    # write csv
-    df = pd.DataFrame(convert_data)
-    file_path = os.path.join(root_dir, 'resources', 'data.csv')
+    if isTrainingFile:
+        # write csv
+        df = pd.DataFrame(convert_data)
+        file_path = os.path.join(root_dir, 'resources', 'data.csv')
 
-    df.to_csv(file_path, index=False)
-
-    return True
+        df.to_csv(file_path, index=False)
+        return True
+    else:
+        return pd.DataFrame(convert_data)
 
 
 def compareEstimateFieldFromCSV(uploaded_file):
     CSV_IMPORT = pd.read_csv(uploaded_file)
+    CSV_IMPORT = CSV_IMPORT.drop_duplicates()
+
     # filter None data -> Empty string
     CSV_IMPORT = CSV_IMPORT.fillna('')
     # remove record has CONST_LABEL_CHECKED_ESTIMATION_ITEMS = '' from
@@ -153,7 +166,9 @@ def compareEstimateFieldFromCSV(uploaded_file):
         classRedText = ''
         keys_diff = None
         check = {}
-
+        # test
+        if value[0]['Parent task'] == 111072:
+            print(value)
         # only compare if have 2 item in Parent task
         if len(value) == 2:
             for item in value:

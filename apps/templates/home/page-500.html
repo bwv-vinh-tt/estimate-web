@@ -30,9 +30,9 @@
 
         <h5 class="login-box-msg">
           Error 500 - Server Error <br />
-          {% if error and error['description'] %}
+          {% if error and error.description %}
             <br />
-            {{ error['description']['description'] }}
+            {{ error.description }}
           {% endif %}
         </h5>
         <p class="login-box-msg">
