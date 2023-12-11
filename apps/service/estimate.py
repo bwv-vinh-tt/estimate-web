@@ -413,7 +413,7 @@ def exportExcelReportGap(data: list):
         ws.cell(row=start_row, column=4, value=row_data[CONST_LABEL_EXPECTED])
         ws.cell(row=start_row, column=5, value=row_data[CONST_LABEL_TRACKER_FROM_INPUT])
         ws.cell(row=start_row, column=6, value=f"=ABS(B{start_row}-C{start_row})/C{start_row}")
-        ws.cell(row=start_row, column=7, value=row_data['gap'])
+        ws.cell(row=start_row, column=7, value=f"=ABS(B{start_row} - D{start_row})/D{start_row}")
         ws.cell(row=start_row, column=8, value=f"=ABS(B{start_row} - D{start_row})")
         
 
