@@ -37,9 +37,12 @@ def renderEstimate():
 @blueprint.route("/importCSV", methods=('GET', 'POST'))
 @login_required
 def importCSV():
-    type = request.args.get('type',default='importCSV')
-    
-    return render_template("estimatePage/importCSV.html", segment='importCSV', subSegment=type)
+    type = request.args.get('type', default='importCSV')
+
+    return render_template(
+        "estimatePage/importCSV.html",
+        segment='importCSV',
+        subSegment=type)
 
 
 @blueprint.route("/calc", methods=('GET', 'POST'))
@@ -161,8 +164,9 @@ def reportResultFromCSV():
         "estimatePage/reportResultFromCSV.html",
         result=result,
         getUrlRedmine=getUrlRedmine,
-        serialized_list=json.dumps(result)
-
+        serialized_list=json.dumps(result),
+        segment='importCSV',
+        subSegment='exportReport',
     )
 
 

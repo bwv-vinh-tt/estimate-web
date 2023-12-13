@@ -66,6 +66,7 @@ CONST_LABEL_ESTIMATED_TIME = 'Total estimated time'
 
 CONST_LABEL_ASSIGNEE = 'assignee'
 
+
 def FILE_NAME(tracker, new_mod):
     return "{}_{}_model.joblib".format(tracker, new_mod)
 

@@ -4,6 +4,7 @@ from .utils import convert_data_redmine, find_dict, getCheckedEstimationFlagValu
 from .common.constant import CONST_IGNORE_FIELD, CONST_LABEL_ASSIGNEE, CONST_LABEL_CHECKED_ESTIMATION_ITEMS_VALUE_YES, CONST_LABEL_ESTIMATED_TIME, CONST_LABEL_FROM_REDMINE, CONST_LABEL_ESTIMATION_FIELD, CONST_LABEL, CONST_LABEL_FROM_REDMINE_ARR, CONST_LABEL_ISSUE_NUMBER, CONST_LABEL_NEW_MOD_FROM_INPUT, CONST_LABEL_TRACKER_FROM_INPUT, CONST_REDMINE_URL, CONST_LABEL_EXPECTED, CONST_LABEL_CHECKED_ESTIMATION_ITEMS
 import copy
 import os
+import numpy as np
 
 # Get the directory path of the current script file
 root_dir = os.getcwd()
@@ -117,8 +118,8 @@ def initCSV(uploaded_file, isTrainingFile=True):
     convert_data = []
     for index, row in CSV_IMPORT.iterrows():
         # remove bad data
-        if (row[CONST_LABEL_EXPECTED] ==
-                0 and isTrainingFile) or pd.isna(row[CONST_LABEL_NEW_MOD_FROM_INPUT]):
+        if (row[CONST_LABEL_EXPECTED] == 0 and isTrainingFile) or pd.isna(
+                row[CONST_LABEL_NEW_MOD_FROM_INPUT]):
             continue
         row = convert_data_redmine(row)
         new_record = RedmineTask()
@@ -130,7 +131,8 @@ def initCSV(uploaded_file, isTrainingFile=True):
                 new_record[CONST_LABEL_ISSUE_NUMBER] = row['']
                 new_record[CONST_LABEL_ASSIGNEE] = row[CONST_LABEL_ASSIGNEE]
                 new_record[CONST_LABEL_TRACKER_FROM_INPUT] = row[CONST_LABEL_TRACKER_FROM_INPUT]
-                new_record[py_.snake_case(CONST_LABEL_ESTIMATED_TIME)] = row[py_.snake_case(CONST_LABEL_ESTIMATED_TIME)]
+                new_record[py_.snake_case(CONST_LABEL_ESTIMATED_TIME)] = row[py_.snake_case(
+                    CONST_LABEL_ESTIMATED_TIME)] if np.isnan(row[py_.snake_case(CONST_LABEL_ESTIMATED_TIME)]) == False else 0
         convert_data.append(new_record.__dict__)
 
     if isTrainingFile:

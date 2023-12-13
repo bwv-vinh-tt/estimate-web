@@ -79,9 +79,10 @@
           <thead>
             <tr>
               <th width="7%">#</th>
-              <th width="">Estimation result</th>
+              <th width="">Standard Estimation</th>
+              <th width="">Estimated time</th>
               <th width="">Spent time</th>
-              <th width="" title="(Estimate - Spent time) / Spent time">Gap * 100%</th>
+              <th width="" title="(Standard Estimate - Spent time) / Spent time">Gap * 100%</th>
               <th width="">Tracker</th>
               <th width="">Assignee</th>
             </tr>
@@ -98,9 +99,12 @@
                 {{value['prediction']}} <br />
               </td>
               <td>
+                {{value['total_estimated_time']}} <br />
+              </td>
+              <td>
                 {{value['spent_time']}}  <br />
               </td>
-              <td class="{% if value['gap'] > 0.3 %} red-text {% endif %}">
+              <td class="{% if (value['gap'] != '' and value['gap'] > 0.3) %} red-text {% endif %}">
                 {{value['gap']}} <br />
               </td>
               <td>

@@ -18,6 +18,7 @@ import plotly.io as pio
 from sklearn.base import BaseEstimator, TransformerMixin
 from typing import Tuple
 from openpyxl import load_workbook
+from openpyxl.styles import NamedStyle
 
 labelTrain = CONST_LABEL_TRAIN
 
@@ -370,7 +371,7 @@ def getObjFromRowData(row):
         CONST_LABEL_ASSIGNEE: row[CONST_LABEL_ASSIGNEE],
         CONST_LABEL_TRACKER_FROM_INPUT: row[CONST_LABEL_TRACKER_FROM_INPUT],
         CONST_LABEL_EXPECTED: row[CONST_LABEL_EXPECTED] / 60,
-        'user_estimate_time': row[py_.snake_case(CONST_LABEL_ESTIMATED_TIME)] 
+        'user_estimate_time': row[py_.snake_case(CONST_LABEL_ESTIMATED_TIME)]
     }
 
 
@@ -382,12 +383,13 @@ def convertToDfAndPredict(row: pd.Series, lm: LinearRegression):
     prediction = lm.predict(dataFramePredict)
     obj['prediction'] = prediction[0][0] / \
         60 if prediction[0][0] / 60 > 0 else MIN_ESTIMATE_TIME
+    obj['prediction'] = round(obj['prediction'], 2)
     obj['gap'] = round(
         (abs(
             obj[CONST_LABEL_EXPECTED] -
             obj['prediction']) /
             obj[CONST_LABEL_EXPECTED]),
-        2) if obj[CONST_LABEL_EXPECTED] != 0 else 0
+        2) if obj[CONST_LABEL_EXPECTED] != 0 else ""
     obj[py_.snake_case(CONST_LABEL_ESTIMATED_TIME)] = obj['user_estimate_time']
     return obj
 
@@ -400,6 +402,9 @@ def exportExcelReportGap(data: list):
             'template-report-gap.xlsx'))
     ws = wb.active
     start_row = 2
+    percentage_style = NamedStyle(name='percentage', number_format='0%')
+    number_style = NamedStyle(name='number', number_format='0.00')
+
     for row_data in data:
         cell1 = ws.cell(
             row=start_row,
@@ -408,14 +413,32 @@ def exportExcelReportGap(data: list):
         cell1.hyperlink = getUrlRedmine(row_data[CONST_LABEL_ISSUE_NUMBER])
         cell1.style = 'Hyperlink'
 
-        ws.cell(row=start_row, column=2, value=row_data['prediction'])
-        ws.cell(row=start_row, column=3, value=row_data[py_.snake_case(CONST_LABEL_ESTIMATED_TIME)])
-        ws.cell(row=start_row, column=4, value=row_data[CONST_LABEL_EXPECTED])
-        ws.cell(row=start_row, column=5, value=row_data[CONST_LABEL_TRACKER_FROM_INPUT])
-        ws.cell(row=start_row, column=6, value=f"=ABS(B{start_row}-C{start_row})/C{start_row}")
-        ws.cell(row=start_row, column=7, value=f"=ABS(B{start_row} - D{start_row})/D{start_row}")
-        ws.cell(row=start_row, column=8, value=f"=ABS(B{start_row} - D{start_row})")
-        
+        ws.cell(
+            row=start_row,
+            column=2,
+            value=row_data['prediction']).style = number_style
+        ws.cell(row=start_row, column=3, value=row_data[py_.snake_case(
+            CONST_LABEL_ESTIMATED_TIME)]).style = number_style
+        ws.cell(
+            row=start_row,
+            column=4,
+            value=row_data[CONST_LABEL_EXPECTED]).style = number_style
+        ws.cell(
+            row=start_row,
+            column=5,
+            value=row_data[CONST_LABEL_TRACKER_FROM_INPUT])
+        ws.cell(
+            row=start_row,
+            column=6,
+            value=f'=IFERROR((ABS(B{start_row}-C{start_row})/C{start_row}), "")').style = percentage_style
+        ws.cell(
+            row=start_row,
+            column=7,
+            value=f'=IFERROR((ABS(B{start_row} - D{start_row})/D{start_row}), "")').style = percentage_style
+        ws.cell(
+            row=start_row,
+            column=8,
+            value=f"=ABS(B{start_row} - D{start_row})").style = number_style
 
         ws.cell(row=start_row, column=9, value=row_data[CONST_LABEL_ASSIGNEE])
         start_row += 1  # next row
