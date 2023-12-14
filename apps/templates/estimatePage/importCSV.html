@@ -40,7 +40,7 @@
 <div class="content-wrapper">
   <section class="content-header container">
     {% if not img%}
-      {% if 'importCSV' in subSegment %}
+      {% if 'importCSV' in segment %}
         <div class="card card-primary">
           <div class="card-header">
             <h3 class="card-title">Upload CSV Training</h3>
@@ -144,7 +144,7 @@
             </div>
           </form>
         </div>
-        {%elif 'exportReport' in subSegment%}
+        {%elif 'exportReport' in segment%}
 
         <div class="card card-success">
           <div class="card-header">

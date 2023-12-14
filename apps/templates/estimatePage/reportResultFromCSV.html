@@ -81,8 +81,9 @@
               <th width="7%">#</th>
               <th width="">Standard Estimation</th>
               <th width="">Estimated time</th>
+              <th width="" title="(Standard Estimate - Estimated time) / Estimated time">Gap * 100% (EST)</th>
               <th width="">Spent time</th>
-              <th width="" title="(Standard Estimate - Spent time) / Spent time">Gap * 100%</th>
+              <th width="" title="(Standard Estimate - Spent time) / Spent time">Gap * 100% (ST)</th>
               <th width="">Tracker</th>
               <th width="">Assignee</th>
             </tr>
@@ -100,6 +101,9 @@
               </td>
               <td>
                 {{value['total_estimated_time']}} <br />
+              </td>
+              <td class="{% if (value['gapEstimate'] != '' and value['gapEstimate'] > 0.3) %} red-text {% endif %}">
+                {{value['gapEstimate']}} <br />
               </td>
               <td>
                 {{value['spent_time']}}  <br />

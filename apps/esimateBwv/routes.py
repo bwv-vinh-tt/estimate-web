@@ -34,15 +34,21 @@ def renderEstimate():
     return render_template('estimatePage/estimate.html', segment='estimate')
 
 
-@blueprint.route("/importCSV", methods=('GET', 'POST'))
+@blueprint.route("/importCSV", methods=['GET'])
 @login_required
 def importCSV():
-    type = request.args.get('type', default='importCSV')
-
     return render_template(
         "estimatePage/importCSV.html",
         segment='importCSV',
-        subSegment=type)
+    )
+
+
+@blueprint.route("/exportReport", methods=['GET'])
+def exportReport():
+    return render_template(
+        "estimatePage/importCSV.html",
+        segment='exportReport',
+    )
 
 
 @blueprint.route("/calc", methods=('GET', 'POST'))
@@ -148,7 +154,6 @@ def estimateCSV():
 
 
 @blueprint.route('/reportResultFromCSV', methods=['POST'])
-@login_required
 def reportResultFromCSV():
     file = request.files['file']
     if not file:
@@ -165,13 +170,11 @@ def reportResultFromCSV():
         result=result,
         getUrlRedmine=getUrlRedmine,
         serialized_list=json.dumps(result),
-        segment='importCSV',
-        subSegment='exportReport',
+        segment='exportReport',
     )
 
 
 @blueprint.route('/exportExcelReportGap', methods=['POST'])
-@login_required
 def exportExcel():
     data: list = json.loads(request.form['data'])
     if len(data) == 0:

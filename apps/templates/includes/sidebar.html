@@ -55,17 +55,9 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="{{ url_for('estimateBwv_blueprint.importCSV') }}" class="nav-link {% if 'importCSV' in subSegment %} active {% endif %}">
+                <a href="{{ url_for('estimateBwv_blueprint.importCSV') }}" class="nav-link {% if 'importCSV' in segment %} active {% endif %}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Import CSV training</p>
-                </a>
-              </li>
-            </ul>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="{{ url_for('estimateBwv_blueprint.importCSV',  type='exportReport') }}" class="nav-link {% if 'exportReport' in subSegment %} active {% endif %}">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Export Report</p>
                 </a>
               </li>
             </ul>
@@ -84,8 +76,15 @@
             <a href="{{ url_for('estimateBwv_blueprint.checkEstimateFieldValue') }}" class="nav-link {% if 'checkEstimateFieldValue' in segment %} active {% endif %}">
               <i class="nav-icon fas fa-th"></i>
               <p>
-                Compare Items
+                Compare Report
               </p>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a href="{{ url_for('estimateBwv_blueprint.exportReport') }}" class="nav-link {% if 'exportReport' in segment %} active {% endif %}">
+              <i class="fas fa-book nav-icon"></i>
+              <p>Export Report</p>
             </a>
           </li>
           <!-- <div class="{% if current_user.is_authenticated == False  %} hide {% endif %}">

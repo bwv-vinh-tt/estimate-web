@@ -391,6 +391,12 @@ def convertToDfAndPredict(row: pd.Series, lm: LinearRegression):
             obj[CONST_LABEL_EXPECTED]),
         2) if obj[CONST_LABEL_EXPECTED] != 0 else ""
     obj[py_.snake_case(CONST_LABEL_ESTIMATED_TIME)] = obj['user_estimate_time']
+    obj['gapEstimate'] = round(
+        (abs(
+            obj[py_.snake_case(CONST_LABEL_ESTIMATED_TIME)] -
+            obj['prediction']) /
+            obj[py_.snake_case(CONST_LABEL_ESTIMATED_TIME)]),
+        2) if obj[py_.snake_case(CONST_LABEL_ESTIMATED_TIME)] != 0 else ""
     return obj
 
 
@@ -402,10 +408,10 @@ def exportExcelReportGap(data: list):
             'template-report-gap.xlsx'))
     ws = wb.active
     start_row = 2
-    percentage_style = NamedStyle(name='percentage', number_format='0%')
     number_style = NamedStyle(name='number', number_format='0.00')
 
     for row_data in data:
+        # #Column issue ID
         cell1 = ws.cell(
             row=start_row,
             column=1,
@@ -413,34 +419,54 @@ def exportExcelReportGap(data: list):
         cell1.hyperlink = getUrlRedmine(row_data[CONST_LABEL_ISSUE_NUMBER])
         cell1.style = 'Hyperlink'
 
+        # Standard Estimation
         ws.cell(
             row=start_row,
             column=2,
             value=row_data['prediction']).style = number_style
+
+        # Estimated time
         ws.cell(row=start_row, column=3, value=row_data[py_.snake_case(
             CONST_LABEL_ESTIMATED_TIME)]).style = number_style
+
+        # Gap * 100% (EST)
         ws.cell(
             row=start_row,
             column=4,
-            value=row_data[CONST_LABEL_EXPECTED]).style = number_style
+            value=f'=IFERROR((ABS(B{start_row}-C{start_row})/C{start_row}), "")').style = number_style
+        # Gap between Standard Estimation & Estimated time (hours)
         ws.cell(
             row=start_row,
             column=5,
-            value=row_data[CONST_LABEL_TRACKER_FROM_INPUT])
+            value=f"=ABS(B{start_row} - C{start_row})").style = number_style
+
+        # Spent time
         ws.cell(
             row=start_row,
             column=6,
-            value=f'=IFERROR((ABS(B{start_row}-C{start_row})/C{start_row}), "")').style = percentage_style
+            value=row_data[CONST_LABEL_EXPECTED]).style = number_style
+
+        # Gap * 100% (ST)
         ws.cell(
             row=start_row,
             column=7,
-            value=f'=IFERROR((ABS(B{start_row} - D{start_row})/D{start_row}), "")').style = percentage_style
+            value=f'=IFERROR((ABS(B{start_row}-F{start_row})/F{start_row}), "")').style = number_style
+
+        # Gap between Standard Estimation & Spent time (hours)
         ws.cell(
             row=start_row,
             column=8,
-            value=f"=ABS(B{start_row} - D{start_row})").style = number_style
+            value=f"=ABS(B{start_row} - F{start_row})").style = number_style
 
-        ws.cell(row=start_row, column=9, value=row_data[CONST_LABEL_ASSIGNEE])
+        # Tracker
+        ws.cell(
+            row=start_row,
+            column=9,
+            value=row_data[CONST_LABEL_TRACKER_FROM_INPUT])
+
+        # Assignee
+        ws.cell(row=start_row, column=10, value=row_data[CONST_LABEL_ASSIGNEE])
+
         start_row += 1  # next row
 
     output = BytesIO()
