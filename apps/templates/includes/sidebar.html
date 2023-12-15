@@ -62,6 +62,7 @@
               </li>
             </ul>
           </li>
+          {% endif %}
           <li class="nav-item">
             <a href="{{ url_for('estimateBwv_blueprint.renderEstimate') }}" class="nav-link {% if 'estimate' in segment %} active {% endif %}">
               <i class="nav-icon fas fa-th"></i>
@@ -70,8 +71,7 @@
               </p>
             </a>
           </li>
-          {% endif %}
-      
+            
           <li class="nav-item">
             <a href="{{ url_for('estimateBwv_blueprint.checkEstimateFieldValue') }}" class="nav-link {% if 'checkEstimateFieldValue' in segment %} active {% endif %}">
               <i class="nav-icon fas fa-th"></i>

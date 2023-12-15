@@ -1,7 +1,7 @@
 
 import json
 from apps.esimateBwv import blueprint
-from flask import Response, abort, render_template, request
+from flask import Response, abort, redirect, render_template, request, url_for
 from flask_login import login_required
 from apps.service.common.constant import CONST_LABEL_CHECKED_ESTIMATION_ITEMS, MIN_ESTIMATE_TIME
 from apps.service.csvProcess import checkIfAnyFieldEmptyInDict, compareEstimateFieldFromCSV, initCSV
@@ -27,10 +27,8 @@ if not os.path.exists(directory3):
 # End
 
 
-@blueprint.route('/estimate', methods=('GET', 'POST'))
-@login_required
+@blueprint.route('/estimate', methods=['GET'])
 def renderEstimate():
-
     return render_template('estimatePage/estimate.html', segment='estimate')
 
 
@@ -54,7 +52,7 @@ def exportReport():
 @blueprint.route("/calc", methods=('GET', 'POST'))
 def calc():
     if request.method == 'GET':
-        return render_template('estimatePage/estimate.html')
+        return redirect(url_for('estimateBwv_blueprint.renderEstimate'))
     else:
         try:
             result = estimate(request.form)
