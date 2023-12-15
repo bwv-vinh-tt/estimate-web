@@ -60,6 +60,12 @@ CONST_LABEL_CHECKED_ESTIMATION_ITEMS_VALUE_YES = ['Yes', 'はい']
 
 CONST_LABEL_CHECKED_ESTIMATION_ITEMS_VALUE_NO = ['No', 'いいえ']
 
+CONST_LABEL_ISSUE_NUMBER = '#'
+
+CONST_LABEL_ESTIMATED_TIME = 'Total estimated time'
+
+CONST_LABEL_ASSIGNEE = 'assignee'
+
 
 def FILE_NAME(tracker, new_mod):
     return "{}_{}_model.joblib".format(tracker, new_mod)
@@ -73,7 +79,13 @@ CONST_LABEL_TRAIN = list(
     filter(
         lambda x: x not in [
             'new_mod',
-            'doc_file_format'],
+            'doc_file_format',
+            # 'doc_mod_quantity',
+            # 'authority_qty',
+            # 'create_scr_api_b_r_qty',
+            # 'field_db_qty',
+            # 'doc_layout'
+        ],
         convert_to_snake_case(CONST_LABEL_ESTIMATION_FIELD_ARR)))
 
 CONST_CHART_IMAGE_NAME = [

@@ -1,0 +1,184 @@
+{% extends "layouts/base.html" %} {% block title %} Estimate {% endblock %}
+
+<!-- Element injected in the BODY element -->
+{% block body_class %} {% endblock body_class %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+<style>
+  table tfoot th > input {
+    width: 100%;
+  }
+
+  table tfoot th select {
+    width: 100%;
+  }
+  
+</style>
+<!-- Google Font: Source Sans Pro -->
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback"
+/>
+<!-- Font Awesome -->
+<link
+  rel="stylesheet"
+  href="/static/assets/plugins/fontawesome-free/css/all.min.css"
+/>
+<!-- fullCalendar -->
+<link
+  rel="stylesheet"
+  href="/static/assets/plugins/fullcalendar/main.min.css"
+/>
+<link
+  rel="stylesheet"
+  href="/static/assets/plugins/fullcalendar-daygrid/main.min.css"
+/>
+<link
+  rel="stylesheet"
+  href="/static/assets/plugins/fullcalendar-timegrid/main.min.css"
+/>
+<link
+  rel="stylesheet"
+  href="/static/assets/plugins/fullcalendar-bootstrap/main.min.css"
+/>
+<!-- DataTables -->
+<link
+  rel="stylesheet"
+  href="/static/assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css"
+/>
+<link
+  rel="stylesheet"
+  href="/static/assets/plugins/datatables-responsive/css/responsive.bootstrap4.min.css"
+/>
+<link
+  rel="stylesheet"
+  href="/static/assets/css/datatables.responsive.css"
+/>
+
+<!-- Theme style -->
+<link rel="stylesheet" href="/static/assets/css/adminlte.min.css" />
+
+{% endblock stylesheets %} {% block content %}
+<div class="content-wrapper">
+  <div class="container d-flex justify-content-center content-header">
+
+      <div class="card card-dark">
+        <div class="card-header">
+          <h3 class="card-title">Result Estimate</h3>
+        </div>
+        <!-- /.card-header -->
+        <input type="button" class="btn btn-danger" value="Download Excel" id="downloadExcel">
+
+        <div class="card-content">
+          <table
+          style="table-layout: fixed"
+          id="resultTable"
+          class="table table-bordered table-hover dataTable dtr-inline table-striped"
+        >
+          <thead>
+            <tr>
+              <th width="7%">#</th>
+              <th width="">Standard Estimation</th>
+              <th width="">Estimated time</th>
+              <th width="" title="(Standard Estimate - Estimated time) / Estimated time">Gap * 100% (EST)</th>
+              <th width="">Spent time</th>
+              <th width="" title="(Standard Estimate - Spent time) / Spent time">Gap * 100% (ST)</th>
+              <th width="">Tracker</th>
+              <th width="">Assignee</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for value in result %}
+            <tr>
+              <td>
+                <a href="{{getUrlRedmine(value['#'])}}"
+                  >{{value['#']}}</a
+                >
+              </td>
+              <td>
+                {{value['prediction']}} <br />
+              </td>
+              <td>
+                {{value['total_estimated_time']}} <br />
+              </td>
+              <td class="{% if (value['gapEstimate'] != '' and value['gapEstimate'] > 0.3) %} red-text {% endif %}">
+                {{value['gapEstimate']}} <br />
+              </td>
+              <td>
+                {{value['spent_time']}}  <br />
+              </td>
+              <td class="{% if (value['gap'] != '' and value['gap'] > 0.3) %} red-text {% endif %}">
+                {{value['gap']}} <br />
+              </td>
+              <td>
+                {{value['tracker']}} <br />
+              </td>
+              <td>
+                {{value['assignee']}} <br />
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+          
+        </table>
+        </div>
+      </div>
+
+
+  </div>
+</div>
+
+<input type="hidden" name="dataHidden" value="{{serialized_list}}">
+{% endblock %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<!-- jQuery -->
+<script src="/static/assets/plugins/jquery/jquery.min.js"></script>
+<!-- Bootstrap 4 -->
+<script src="/static/assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- DataTables -->
+<script src="/static/assets/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="/static/assets/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+<script src="/static/assets/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+<script src="/static/assets/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+<!-- AdminLTE App -->
+<!-- AdminLTE for demo purposes -->
+<script src="/static/assets/js/demo.js"></script>
+<!-- custom script -->
+<script>
+  $(document).on('click','#downloadExcel', function(e){
+    e.preventDefault();
+    $.ajax({
+      type: 'POST',
+      url: '/exportExcelReportGap',
+      data: {data: $('input[name="dataHidden"]').val()},
+      xhrFields: {
+        responseType: 'blob'
+    },
+      success: function (data) {
+          var blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+          // Create a temporary URL for the blob
+          var url = window.URL.createObjectURL(blob);
+          // Create an anchor element for downloading
+          var a = $("<a style='display: none;'/>");
+          a.attr("href", url);
+          a.attr("download", "data.xlsx");
+
+          // Append the anchor element to the document and trigger a click event
+          $("body").append(a);
+          a[0].click();
+
+          // Remove the anchor element and revoke the URL to free up resources
+          window.URL.revokeObjectURL(url);
+          a.remove();
+      },
+      error: function (data) {
+          alert('Error');
+      }
+  });
+  
+  })
+</script>
+{% endblock javascripts %}
