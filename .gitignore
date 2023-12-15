@@ -32,6 +32,7 @@ apps/static/assets/yarn.lock
 apps/static/assets/.temp
 
 # joblib
+joblib
 *.joblib
 
 # csv
