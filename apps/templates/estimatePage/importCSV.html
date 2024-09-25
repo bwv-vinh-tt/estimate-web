@@ -75,41 +75,6 @@
           </form>
         </div>
 
-        <div class="card card-danger">
-          <div class="card-header">
-            <h3 class="card-title">Upload CSV Box Plot</h3>
-          </div>
-          <!-- /.card-header -->
-          <!-- form start -->
-          <form
-            name="uploadCheckBoxPlot"
-            action="{{url_for('estimateBwv_blueprint.checkBoxPlot')}}"
-            method="POST"
-            enctype="multipart/form-data"
-          >
-            <div class="form-group">
-              <div class="input-group">
-                <div class="custom-file">
-                  <input
-                    name="file"
-                    type="file"
-                    class="custom-file-input"
-                    id="exampleInputFile"
-                  />
-                  <label class="custom-file-label" for="exampleInputFile"
-                    >Choose file</label
-                  >
-                </div>
-          
-              </div>
-            </div>
-            <!-- /.card-body -->
-            <div class="card-footer">
-              <button type="submit" class="btn btn-danger">Submit</button>
-            </div>
-          </form>
-        </div>
-
         <div class="card card-info">
           <div class="card-header">
             <h3 class="card-title">Estimate by CSV</h3>
